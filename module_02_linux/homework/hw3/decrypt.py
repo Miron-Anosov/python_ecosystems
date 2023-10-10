@@ -38,7 +38,39 @@ import sys
 
 
 def decrypt(encryption: str) -> str:
-    ...
+    """
+    Функция принимает зашифрованный текст и возвращает расшифрованный результат.
+
+    Agr:
+        encryption: str: Зашифрованная строка.
+    Returns:
+          str: Расшифрованная строка.
+    """
+    # Выполняем рекурсивный обход, если обнаружены точки.
+    if encryption.count('.'):
+        encryption_list = list(encryption)
+
+        for index, item in enumerate(encryption):
+
+            # Удаляем элемент и две точки.
+            if encryption[(index + 1) % len(encryption)] == '.' and encryption[(index + 2) % len(encryption)] == '.':
+                encryption_list.pop(index % len(encryption_list))
+
+                if encryption_list:  # Удаляем элементы по индексу, если таковы остались.
+                    encryption_list.pop(encryption_list.index(encryption[(index + 1) % len(encryption)]))
+                    encryption_list.pop(encryption_list.index(encryption[(index + 2) % len(encryption)]))
+                    # После удалений элементов в списке, запускаем новую рекурсию т.к. индексы больше не актуальны.
+                    return decrypt(''.join(encryption_list))
+
+                return decrypt('')  # Иначе возвращаем пустую строку
+
+            # Удаляем только точку.
+            elif encryption[(index + 1) % len(encryption)] == '.' and encryption[(index + 2) % len(encryption)] != '.':
+                encryption_list.pop(encryption_list.index(encryption[(index + 1) % len(encryption)]))
+                return decrypt(''.join(encryption_list))
+    else:
+        # Иначе возвращаем строку.
+        return encryption
 
 
 if __name__ == '__main__':
