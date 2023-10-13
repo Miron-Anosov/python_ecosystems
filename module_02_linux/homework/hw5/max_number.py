@@ -21,8 +21,8 @@ app = Flask(__name__)
 @app.route("/max_number/<path:nums>")
 def max_number(**kwargs):
     """Функция возвращает максимальное число из предоставленных пользователем."""
-    list_nums: list = [int(int_) for int_ in kwargs.get('nums').split('/') if int_.isdigit()]
-    # TODO Обратите внимание на функцию map для преобразования элементов списка.
+    nums = kwargs.get('nums').split('/')
+    list_nums = list(map(int, filter(str.isdigit, nums)))
     return f'Максимальное число: <i>{max(list_nums)}</i>'
 
 
