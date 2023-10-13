@@ -27,6 +27,7 @@ def get_summary_rss(ps_output_file_path: str) -> str:
     """
     rss: int = 0
     index_rss: int | None = None
+    size_count = 0
     try:
         with open(ps_output_file_path, 'w', encoding='utf-8') as file_create:
             subprocess.run(['ps', 'aux'], stdout=file_create, text=True)
@@ -37,11 +38,21 @@ def get_summary_rss(ps_output_file_path: str) -> str:
                         index_rss = bite_date.index('RSS')
                     if bite_date[index_rss].isdigit():
                         rss += int(bite_date[index_rss])
-            rss = int(rss / (1024 * 2))  # TODO почему 2? Надо делить на 1024 пока результат деления не станет равен
-                                         #  меньше 1024 и считать итерации, соответственно, размерность будет байт,
-                                         #  килобайты, мегабайты, гигабайты в зависимости от количества итераций
-        return f'{rss} Mb'
-    except (FileNotFoundError, IOError) as er:
+            rss_iter = int(rss)
+            while rss_iter >= 1024:
+                rss_iter = rss_iter // 1024
+                size_count += 1
+            rss = rss // (1024 * size_count)
+            match size_count:
+                case 0:
+                    return f'{rss:,} байт'
+                case 1:
+                    return f'{rss:,} килобайт'
+                case 2:
+                    return f'{rss:,} мегабайт'
+                case 3:
+                    return f'{rss:,} гигабайт'
+    except (FileNotFoundError, IOError, ValueError) as er:
         print(er)
 
 
