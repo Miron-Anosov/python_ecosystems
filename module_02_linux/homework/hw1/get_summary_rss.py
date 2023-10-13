@@ -37,7 +37,9 @@ def get_summary_rss(ps_output_file_path: str) -> str:
                         index_rss = bite_date.index('RSS')
                     if bite_date[index_rss].isdigit():
                         rss += int(bite_date[index_rss])
-            rss = int(rss / (1024 * 2))
+            rss = int(rss / (1024 * 2))  # TODO почему 2? Надо делить на 1024 пока результат деления не станет равен
+                                         #  меньше 1024 и считать итерации, соответственно, размерность будет байт,
+                                         #  килобайты, мегабайты, гигабайты в зависимости от количества итераций
         return f'{rss} Mb'
     except (FileNotFoundError, IOError) as er:
         print(er)

@@ -22,6 +22,7 @@ app = Flask(__name__)
 def max_number(**kwargs):
     """Функция возвращает максимальное число из предоставленных пользователем."""
     list_nums: list = [int(int_) for int_ in kwargs.get('nums').split('/') if int_.isdigit()]
+    # TODO Обратите внимание на функцию map для преобразования элементов списка.
     return f'Максимальное число: <i>{max(list_nums)}</i>'
 
 
