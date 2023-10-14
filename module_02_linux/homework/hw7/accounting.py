@@ -13,9 +13,10 @@
 """
 
 from flask import Flask
-from manager_accounting import manager
+from manager_accounting import Manager
 
 app = Flask(__name__)
+manager = Manager()
 
 
 @app.route("/add/<date>/<int:number>")
