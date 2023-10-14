@@ -2,7 +2,7 @@ import unittest
 from module_03_ci_culture_beginning.homework.hw3.accounting import app, manager
 
 
-class MyTestCase(unittest.TestCase):
+class TestAccounting(unittest.TestCase):
     """
     Класс тестов для проверки функциональности приложения учёта финансов.
 
