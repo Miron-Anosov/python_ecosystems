@@ -13,25 +13,25 @@
 """
 
 from flask import Flask
+from manager_accounting import Manager
 
 app = Flask(__name__)
-
-storage = {}
+manager = Manager()
 
 
 @app.route("/add/<date>/<int:number>")
 def add(date: str, number: int):
-    ...
+    return manager.add_date(date, number)
 
 
 @app.route("/calculate/<int:year>")
 def calculate_year(year: int):
-    ...
+    return manager.calculate_year_mouth(year)
 
 
 @app.route("/calculate/<int:year>/<int:month>")
 def calculate_month(year: int, month: int):
-    ...
+    return manager.calculate_year_mouth(year, month)
 
 
 if __name__ == "__main__":

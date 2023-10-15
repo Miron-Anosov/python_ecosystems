@@ -7,14 +7,18 @@
 /hello-world/Саша  →  Привет, Саша. Хорошей субботы!
 """
 
+from datetime import datetime
 from flask import Flask
 
 app = Flask(__name__)
 
 
-@app.route('/hello-world/...')
-def hello_world():
-    ...
+@app.route('/hello-world/<string:name_user>')
+def hello_world(name_user: str):
+    days_of_week = ("Хорошего Понедельника", "Хорошего Вторника", "Хорошей Среды", "Хорошего Четверга",
+                    "Хорошей Пятницы", 'Хорошей Субботы', "Хорошего Воскресенья")
+    num_day = datetime.today().weekday()
+    return f'Привет, {name_user}. {days_of_week[num_day]}!'
 
 
 if __name__ == '__main__':

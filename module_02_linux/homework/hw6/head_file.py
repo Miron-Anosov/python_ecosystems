@@ -30,13 +30,15 @@ hello world!
 """
 
 from flask import Flask
+from func_for_head_file import func_for_head_file
 
 app = Flask(__name__)
 
 
-@app.route("/head_file/<int:size>/<path:relative_path>")
-def head_file(size: int, relative_path: str):
-    ...
+@app.route("/head_file/<path:relative_path>")
+def head_file(relative_path: str):
+    result = func_for_head_file(path=relative_path)
+    return result
 
 
 if __name__ == "__main__":
