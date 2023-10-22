@@ -23,7 +23,6 @@ def ps() -> str:
     command_str = " ".join(shlex.quote(str_) for str_ in args)
     command = shlex.split(command_str)
     command.insert(0, 'ps')
-    print(command)
     result = subprocess.run(command, capture_output=True, text=True).stdout
     return f"<pre>{result}</pre>"
     # TODO для корректного отображения текста в формате html надо заменять символы <, >, и ":
