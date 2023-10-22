@@ -26,6 +26,9 @@ def ps() -> str:
     print(command)
     result = subprocess.run(command, capture_output=True, text=True).stdout
     return f"<pre>{result}</pre>"
+    # TODO для корректного отображения текста в формате html надо заменять символы <, >, и ":
+    #  https://ruseller.com/lessons.php?rub=1&id=2106 иначе текст может отображаться не так как вы ожидаете,
+    #  например часть текста отбрасывается или зачеркиваться т.д.
 
 
 if __name__ == "__main__":
