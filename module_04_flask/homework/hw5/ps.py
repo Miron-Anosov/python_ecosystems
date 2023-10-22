@@ -7,15 +7,25 @@
 
 /ps?arg=a&arg=u&arg=x
 """
+import subprocess
+import shlex
+from typing import List
 
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
 
 @app.route("/ps", methods=["GET"])
 def ps() -> str:
-    ...
+    """"Endpoint предоставляет доступ к командам ps в терминале """
+    args: List[str] = request.args.getlist("arg")
+    command_str = " ".join(shlex.quote(str_) for str_ in args)
+    command = shlex.split(command_str)
+    command.insert(0, 'ps')
+    print(command)
+    result = subprocess.run(command, capture_output=True, text=True).stdout
+    return f"<pre>{result}</pre>"
 
 
 if __name__ == "__main__":
