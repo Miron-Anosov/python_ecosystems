@@ -4,6 +4,7 @@
 
 Сделать это можно с помощью команды uptime.
 """
+import subprocess
 
 from flask import Flask
 
@@ -12,7 +13,9 @@ app = Flask(__name__)
 
 @app.route("/uptime", methods=['GET'])
 def uptime() -> str:
-    ...
+    """Endpoint предоставляет доступ к информации безпрерывной работы системы"""
+    uptime_ = subprocess.run(['uptime', '-p'], capture_output=True, text=True).stdout
+    return f"Current uptime is {uptime_}"
 
 
 if __name__ == '__main__':
