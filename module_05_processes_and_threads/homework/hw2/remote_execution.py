@@ -35,6 +35,8 @@ def run_python_code_in_subproccess(code: str, timeout: int) -> str:
         timeout: int:  таймер.
     """
     cmd: List[str] = ['prlimit', '--nproc=1:1', 'python3', '-c', code]
+    # TODO весьма желательно экранировать команду с помощью shlex.quote:
+    #  https://docs-python.ru/standart-library/modul-shlex-python/funktsija-quote-modulja-shlex/
     with subprocess.Popen(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as code_py:
         try:
             stdout, stderr = code_py.communicate(timeout=timeout)
