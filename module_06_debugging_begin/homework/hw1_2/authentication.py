@@ -25,12 +25,44 @@ from typing import List
 import requests
 
 logger = logging.getLogger("password_checker")
+file: str = os.path.abspath(os.path.join('stderr.txt'))
+# формат сообщений для файлов
+forma_file: Formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(message)s ', datefmt='%H:%M:%S')
+# формат сообщений для терминала
+forma_terminal: Formatter = logging.Formatter(fmt='%(message)s')
 
-url = 'https://gist.githubusercontent.com/wchargin/8927565/raw/d9783627c731268fb2935a731a618aa8e95cf465/words'
+logger.setLevel(level=logging.DEBUG)
+# поток в файл
+file_handler: FileHandler = logging.FileHandler(filename=file, mode='w', encoding='utf-8')
+file_handler.setFormatter(fmt=forma_file)
+file_handler.setLevel(level=logging.DEBUG)
+# поток в терминал
+console_handler: StreamHandler = logging.StreamHandler()
+console_handler.setFormatter(fmt=forma_terminal)
+console_handler.setLevel(level=logging.INFO)
+# потоки передаются в handler
+logger.addHandler(hdlr=file_handler)
+logger.addHandler(hdlr=console_handler)
 
-with requests.get(url) as page:
-    text: List[str] = page.text.split()
-    words: set = set(i for i in text if len(i) > 4)
+
+def check_words_list() -> set[str]:
+    path: str = os.path.abspath(os.path.join('words_from_4_symbols.txt'))
+    if not os.path.exists(path=path):
+        url: str = 'https://gist.githubusercontent.com/wchargin/8927565/raw/d9783627c731268fb2935a731a618aa8e95cf465/words'
+
+        with requests.get(url=url) as page:
+            text: List[str] = page.text.split()
+            words_from_4len: set = set(i for i in text if len(i) > 4)
+        with open(file=path, mode='w', encoding='UTF-8') as file_new:
+            file_new.write(' '.join(map(str, words_from_4len)))
+        return words_from_4len
+    else:
+        with open(file=path, mode='r', encoding='UTF-8') as file_read:
+            words_from_file: set = set(file_read.read().split())
+        return words_from_file
+
+
+words: set = check_words_list()
 
 
 def is_strong_password(password: str) -> bool:
@@ -69,25 +101,6 @@ def input_and_check_password() -> bool:
 
 
 if __name__ == "__main__":
-    file: str = os.path.abspath(os.path.join('stderr.txt'))
-    # формат сообщений для файлов
-    forma_file: Formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(message)s ', datefmt='%H:%M:%S')
-    # формат сообщений для терминала
-    forma_terminal: Formatter = logging.Formatter(fmt='%(message)s')
-
-    logger.setLevel(level=logging.DEBUG)
-    # поток в файл
-    file_handler: FileHandler = logging.FileHandler(filename=file, mode='w', encoding='utf-8')
-    file_handler.setFormatter(fmt=forma_file)
-    file_handler.setLevel(level=logging.DEBUG)
-    # поток в терминал
-    terminal_handler: StreamHandler = logging.StreamHandler()
-    terminal_handler.setFormatter(fmt=forma_terminal)
-    terminal_handler.setLevel(level=logging.INFO)
-    # потоки передаются в handler
-    logger.addHandler(hdlr=file_handler)
-    logger.addHandler(hdlr=terminal_handler)
-
     logger.info("Вы пытаетесь аутентифицироваться в Skillbox")
 
     count_number: int = 3
