@@ -74,6 +74,8 @@ def task3() -> int:
     """
 
     cmd_str = f'grep -c \\"time\\":\\ \\"05:[0-1][0-9]:[0-5][0-9]\\",\\ \\""level\\": \\"CRITICAL\\"" {shlex.quote(file)}'
+    # TODO регэкспами можно чуть проще сделать:
+    #  PATTERN: str = r'"time": "05:[01].:..", "level": "CRITICAL"'
     cmd_list: List[str] = shlex.split(cmd_str)
     with subprocess.Popen(cmd_list, stdout=subprocess.PIPE, text=True, encoding='utf-8') as result:
         count_call = int(result.stdout.read())
