@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h6> {{ h6 }}</h6>
+    <hr>
+    <ul>
+        {% for url, endpoint in links -%}
+        <li><a href="{{ url }}">{{ endpoint }}</a></li>
+        {% endfor %}
+    </ul>
+    <hr>
+</body>
+</html>
