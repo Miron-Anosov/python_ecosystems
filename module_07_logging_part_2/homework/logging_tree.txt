@@ -1,0 +1,38 @@
+<--""
+   Level DEBUG
+   Handler <RootStreamHandler <stdout> (NOTSET)>
+     Filter <CustomHandlers.ASCIIFilter object at 0x7f78b10aa770>
+   |
+   o   "app"
+   |   Level DEBUG
+   |   Propagate OFF
+   |   Handler Stream <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+   |     Level DEBUG
+   |     Formatter fmt="'%(levelname)s | %(name)s | %(asctime)s | %(lineno)s | %(message)s'" datefmt="'%Y-%m-%d %H:%M:%S'"
+   |   Handler <FileSeparateError (ERROR)>
+   |     Level ERROR
+   |     Formatter fmt="'%(levelname)s | %(name)s | %(asctime)s | %(lineno)s | %(message)s'" datefmt="'%Y-%m-%d %H:%M:%S'"
+   |   Handler <FileSeparateDebug (DEBUG)>
+   |     Level DEBUG
+   |     Formatter fmt="'%(levelname)s | %(name)s | %(asctime)s | %(lineno)s | %(message)s'" datefmt="'%Y-%m-%d %H:%M:%S'"
+   |   |
+   |   o   "app.http"
+   |   |   Level DEBUG
+   |   |   Propagate OFF
+   |   |   Handler <HTTPHandlerCustom (DEBUG)>
+   |   |     Level DEBUG
+   |   |     Formatter fmt="'%(levelname)s | %(name)s | %(asctime)s | %(lineno)s | %(message)s'" datefmt="'%Y-%m-%d %H:%M:%S'"
+   |   |
+   |   o   "app.utils"
+   |       Level INFO
+   |       Propagate OFF
+   |       Handler <UtilTimedRotatingFileHandler /home/miron/Загрузки/python_advanced/python_advanced/module_07_logging_part_2/homework/util.log (INFO)>
+   |         Level INFO
+   |         Filter <CustomHandlers.ASCIIFilter object at 0x7f78b10aaf20>
+   |         Formatter fmt="'%(levelname)s | %(name)s | %(asctime)s | %(lineno)s | %(message)s'" datefmt="'%Y-%m-%d %H:%M:%S'"
+   |
+   o   "flask"
+       Level INFO
+       Propagate OFF
+       Handler <RootStreamHandler <stdout> (NOTSET)>
+         Filter <CustomHandlers.ASCIIFilter object at 0x7f78b10aa770>
