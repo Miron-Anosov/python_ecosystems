@@ -24,19 +24,36 @@ logger.info('Сообщение')
 
 Вам нужно дописать метод process так, чтобы в логах была всегда JSON-валидная строка.
 """
-
+import json
 import logging
+import os.path
+from logging import Formatter, FileHandler, StreamHandler
 
 
 class JsonAdapter(logging.LoggerAdapter):
     def process(self, msg, kwargs):
-        new_message = msg
+        new_message: str = msg
+        new_message: str = json.dumps(new_message, ensure_ascii=False).replace(r'\"', '"')
         return new_message, kwargs
 
 
 if __name__ == '__main__':
-    logger = JsonAdapter(logging.getLogger(__name__))
+    path_file: str = os.path.abspath(os.path.join('skillbox_json_messages.log'))
+    logger: JsonAdapter = JsonAdapter(logging.getLogger(__name__))
+
+    formatter: Formatter = logging.Formatter(
+        fmt='{"time" : "%(asctime)s",  "level" : "%(levelname)s",  "message" : %(message)s}', datefmt="%H:%M:%S")
+    file_handler: FileHandler = logging.FileHandler(filename=path_file, mode='w', encoding='utf-8')
+    file_handler.setFormatter(fmt=formatter)
+    file_handler.setLevel(level=logging.DEBUG)
+    logger.logger.addHandler(file_handler)
+
+    ch: StreamHandler = logging.StreamHandler()
+    ch.setLevel(level=logging.DEBUG)
+    ch.setFormatter(fmt=formatter)
+    logger.logger.addHandler(ch)
+
     logger.setLevel(logging.DEBUG)
     logger.info('Сообщение')
     logger.error('Кавычка)"')
-    logger.debug("Еще одно сообщение")
+    logger.debug("Еще одно ""'сообщение'")
