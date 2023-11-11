@@ -64,6 +64,10 @@ class ASCIIFilter(logging.Filter):
         value: str = record.msg
         if isinstance(value, str):
             return not any(True if ord(i) > 127 else False for i in value)
+# TODO можно сделать проще:
+# class AsciiFilter(logging.Filter):
+#     def filter(self, record: LogRecord) -> bool:
+#         return str.isascii(record.msg)
 
 
 class HTTPHandlerCustom(logging.handlers.HTTPHandler):
