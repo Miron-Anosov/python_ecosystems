@@ -1,0 +1,6 @@
+'ERROR | app | '2023-11-10 13:34:51' | 75 | Error while converting number 2 : one'
+'ERROR | app | '2023-11-10 13:34:51' | 76 | could not convert string to float: 'one''
+Traceback (most recent call last):
+  File "/home/miron/Загрузки/python_advanced/python_advanced/module_07_logging_part_2/homework/app.py", line 73, in calc
+    num_2 = float(num_2)
+ValueError: could not convert string to float: 'one'
