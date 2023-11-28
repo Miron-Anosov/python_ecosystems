@@ -71,7 +71,9 @@ for numm, result_table in enumerate(result):
 print(f'В таблице table_1 уникальных записей: {result_2[0][0]}')
 
 #  Как много записей из таблицы table_1 встречается в table_2?
+# TODO Имелось ввиду поле value, а не id
 print(f'Записей из таблицы table_1 встречается в table_2 : {result_3[0][0]}')
 
 #  Как много записей из таблицы table_1 встречается и в table_2, и в table_3?
+# TODO Аналогично предыдущему
 print(f'Записей из таблицы table_1 встречается и в table_2, и в table_3: {result_4[0][0]}')
