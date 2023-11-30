@@ -41,7 +41,7 @@ with sqlite3.connect(database=db) as connect:
                     JOIN 
                         `table_2` AS t2
                     ON 
-                        t2.id = t1.id    
+                        t2.value = t1.value
     """)
     result_3 = cur.fetchall()
 ##############################################################
@@ -54,11 +54,11 @@ with sqlite3.connect(database=db) as connect:
                         JOIN 
                             `table_2` AS t2
                         ON 
-                            t2.id = t1.id
+                            t2.value = t1.value
                         JOIN
                             `table_3` AS t3
                         ON 
-                            t3.id = t1.id 
+                            t3.value = t1.value
         """)
     result_4 = cur.fetchall()
 
