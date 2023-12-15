@@ -26,7 +26,7 @@ t2: Thread = Thread(target=fun2, daemon=True)
 try:
     t1.start()
     t2.start()
-    while t1.is_alive() or t2.is_alive():
+    while t1.is_alive() or t2.is_alive():  # TODO вместо цикла лучше джойнить оба потока (t1.join(), ..) ведь это блокирующий метод
         time.sleep(0.25)
 except KeyboardInterrupt:
     print('\nReceived keyboard interrupt, quitting threads.')
