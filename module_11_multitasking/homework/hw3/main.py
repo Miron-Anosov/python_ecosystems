@@ -2,7 +2,7 @@ import logging
 import random
 import threading
 import time
-from typing import List
+from typing import List, Optional
 
 TOTAL_TICKETS: int = 10
 
@@ -35,9 +35,40 @@ class Seller(threading.Thread):
         time.sleep(random.randint(0, 1))
 
 
+class Headmaster(threading.Thread):
+    def __init__(self, semaphore: threading.Semaphore, total_sold: int, name: str,
+                 demon: Optional[bool] | None = ...) -> None:
+        super().__init__(name=name, daemon=demon)
+        self.sem: threading.Semaphore = semaphore
+        self.tickets_made: int = 0  # Новые билеты
+        self.total_seat: int = total_sold  # Доступные места для продажи
+        logger.info('Headmaster started work')
+
+    def run(self) -> None:
+        global TOTAL_TICKETS
+        self.total_seat -= TOTAL_TICKETS  # При старте узнаем доступные места для продажи.
+        while True:
+            if 5 >= TOTAL_TICKETS:
+                with self.sem:
+                    # Пока директор пополняет билеты, продавцы не могут их продавать.
+                    with threading.Lock():
+                        TOTAL_TICKETS += 1
+                        self.tickets_made += 1
+                        self.total_seat -= 1
+                        logger.info(f'{self.name} made one ticket. Tickets are available: {TOTAL_TICKETS}')
+            elif self.total_seat <= 0:  # Если на все места проданы билеты, то директор прекращает свою работу.
+                break
+            else:
+                logger.info(f'Free seats: {self.total_seat}')
+                time.sleep(random.randint(0, 1))
+        logger.info(f'{self.name}  made  new {self.tickets_made} tickets and got home.')
+
+
 def main() -> None:
-    semaphore: threading.Semaphore = threading.Semaphore()
+    semaphore: threading.Semaphore = threading.Semaphore(3)
     sellers: List[Seller] = []
+    headmaster = Headmaster(semaphore=semaphore, total_sold=30, name='Headmaster', demon=True)
+    headmaster.start()
     for _ in range(4):
         seller = Seller(semaphore)
         seller.start()
@@ -45,6 +76,7 @@ def main() -> None:
 
     for seller in sellers:
         seller.join()
+    headmaster.join()
 
 
 if __name__ == '__main__':
