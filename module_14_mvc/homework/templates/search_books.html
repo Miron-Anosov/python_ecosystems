@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="title-search-books">
+    <h1 class="title-h1">Enter the author's name</h1>
+    <div>
+        <form method="post" action="/books/search" autocomplete="on" class="search-books">
+            <input type="text" size="30" maxlength="50" placeholder="Enter author's name" name="search">
+            <input type="submit" name="look-for" value="Go">
+        </form>
+    </div>
+</div>
+{% endblock %}
