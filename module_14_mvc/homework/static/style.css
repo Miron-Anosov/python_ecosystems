@@ -140,3 +140,20 @@ table.customTable thead {
     margin-top: 10px;
     text-align: right;
 }
+
+.title-search-books {
+    background :  #2A88AD;
+    margin-left: 25%;
+    margin-top: 10%;
+    width: 25%;
+    padding: 5%;
+    text-align: center
+}
+
+.title-h1 {
+    font: 100% Arial, Helvetica, sans-serif;
+}
+
+.search-books {
+    margin-left 40%;
+}
