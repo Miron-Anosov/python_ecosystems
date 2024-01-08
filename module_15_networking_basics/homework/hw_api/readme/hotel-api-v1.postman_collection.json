@@ -1,0 +1,280 @@
+{
+	"info": {
+		"_postman_id": "92ecc3ba-ac50-4219-a80d-ca465d21d6b3",
+		"name": "hotel-api/v1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29431301"
+	},
+	"item": [
+		{
+			"name": "new-rooms",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.sendRequest(pm.variables.get(\"url\") + '/room', (err, res) => {\r",
+							"    let totalRooms = res.json().rooms.length;\r",
+							"    pm.test(\"Request should add new room to the service.\", () => {\r",
+							"        pm.expect(totalRooms).to.be.eql(pm.environment.get(\"totalRoomsBeforeRequest\") + 1)\r",
+							"    });\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"floor\": 1,\r\n    \"beds\": 1,\r\n    \"guestNum\": 2,\r\n    \"price\": 1000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/v1/new-rooms"
+			},
+			"response": []
+		},
+		{
+			"name": "getting-rooms",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"roomId\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response schema should match\", function () {\r",
+							"    const schema = {\r",
+							"        \"properties\": {\r",
+							"            \"rooms\": {\r",
+							"                \"items\": {\r",
+							"                    \"$id\": \"#/properties/rooms/items\",\r",
+							"                    \"anyOf\": [\r",
+							"                        {\r",
+							"                            \"type\": \"object\",\r",
+							"                            \"required\": [\r",
+							"                                \"roomId\",\r",
+							"                                \"floor\",\r",
+							"                                \"guestNum\",\r",
+							"                                \"beds\",\r",
+							"                                \"price\"\r",
+							"                            ],\r",
+							"                            \"properties\": {\r",
+							"                                \"roomId\": {\r",
+							"                                    \"type\": \"integer\"\r",
+							"                                },\r",
+							"                                \"floor\": {\r",
+							"                                    \"type\": \"integer\"\r",
+							"                                },\r",
+							"                                \"guestNum\": {\r",
+							"                                    \"type\": \"integer\"\r",
+							"                                },\r",
+							"                                \"beds\": {\r",
+							"                                    \"type\": \"integer\"\r",
+							"                                },\r",
+							"                                \"price\": {\r",
+							"                                    \"type\": \"integer\"\r",
+							"                                }\r",
+							"                            }\r",
+							"                        }\r",
+							"                    ]\r",
+							"                }\r",
+							"            }\r",
+							"        }\r",
+							"    }\r",
+							"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"const rooms = pm.response.json().rooms;\r",
+							"pm.environment.set(\"roomId\", rooms[rooms.length - 1].roomId);\r",
+							"pm.environment.set('roomRequest', pm.request)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/v1/rooms?checkIn={{checkInDate}}&checkOut={{checkOutDate}}&guestsNum=2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"rooms"
+					],
+					"query": [
+						{
+							"key": "checkIn",
+							"value": "{{checkInDate}}"
+						},
+						{
+							"key": "checkOut",
+							"value": "{{checkOutDate}}"
+						},
+						{
+							"key": "guestsNum",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "booking-rooms",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"bookingDates\": {\r\n    \"checkIn\": {{checkInDate}},\r\n    \"checkOut\": {{checkOutDate}}\r\n  },\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Smith\",\r\n  \"roomId\": {{roomId}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/v1/bookings"
+			},
+			"response": []
+		},
+		{
+			"name": "update-rooms Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"bookingDates\": {\r\n    \"checkIn\": {{checkInDate}},\r\n    \"checkOut\": {{checkOutDate}}\r\n  },\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Smith\",\r\n  \"roomId\": {{roomId}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/v1/update-rooms"
+			},
+			"response": []
+		},
+		{
+			"name": "cancel-rooms",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"bookingDates\": {\r\n    \"checkIn\": {{checkInDate}},\r\n    \"checkOut\": {{checkOutDate}}\r\n  },\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Smith\",\r\n  \"roomId\": {{roomId}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/v1/cancel-rooms"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "checkInDate",
+			"value": "20210308",
+			"type": "string"
+		},
+		{
+			"key": "checkOutDate",
+			"value": "20210311",
+			"type": "string"
+		}
+	]
+}
