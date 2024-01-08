@@ -1,7 +1,7 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 from module_15_networking_basics.homework.hw_api.data.database_interface import db_worker
-from utils.json_worker import read_json
+from module_15_networking_basics.homework.hw_api.data.utils.json_worker import read_json
 
 app = Flask(__name__)
 db = db_worker()
@@ -10,13 +10,13 @@ db = db_worker()
 @app.route('/room', methods=['GET'])
 def room():
     if request.method == "GET":
-        return db.get_rooms(), 200
+        return jsonify(db.get_rooms()), 200
 
 
 @app.route('/add-room', methods=['POST'])
 def add_room():
     db.create_room(new_room=read_json(request.get_data().decode()))
-    return db.get_rooms(), 200
+    return jsonify(db.get_rooms()), 200
 
 
 @app.route('/booking', methods=["POST"])
