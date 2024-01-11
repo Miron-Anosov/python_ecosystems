@@ -23,7 +23,7 @@ def add_room():
 def booking():
     req = request.get_data().decode()
     if db.booking(person=read_json(req)):
-        return "Can't book same room twice", 200  # TODO фраза, видимо, должна быть об успехе бронирования?
+        return "Room resource is still accessible", 200
     return "Can't book same room twice", 409
 
 
