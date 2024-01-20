@@ -12,14 +12,14 @@ from models import (
     update_book_by_id,
     delete_author_by_id,
     get_author_by_id,
-    add_author,
+    add_author, Book,
 )
 from schemas import (BookSchema,
                      BookIDValidator,
                      ValidatorExistsBook,
                      AuthorIDValidator,
                      AuthorSchema,
-                     AuthorExistsValidator)
+                     AuthorExistsValidator, BookTypeValidate)
 
 app = Flask(__name__)
 api = Api(app, version='0.1.alpha', title="Books API", description='API for managing books')
@@ -90,7 +90,7 @@ class BookList(Resource):
 
 
 @api.route('/api/books/<int:id>')
-class Book(Resource):
+class Books(Resource):
     """
     Класс дочерний от класса Resource.  Реализует методы для работы с книгами по их ID.
     """
@@ -148,15 +148,18 @@ class Book(Resource):
         """ Update exist book. """
         data = request.json
         schema = BookSchema()
-        schema_book_id = BookIDValidator()
+        valid_book_id = BookIDValidator()
+        field_valid = BookTypeValidate()
         try:
-            book_id = schema_book_id.load({'book_id': id})
-            book = schema.load(data)
-            book.id = book_id
+            book_id = valid_book_id.load({'book_id': id})
+            up_data = field_valid.load(data)
         except ValidationError as exc:
             return exc.messages, 400
         else:
-            book = update_book_by_id(book, return_book=True)
+            book_old: Book = get_book_by_id(book_id)
+            for field, data in up_data.items():
+                setattr(book_old, field, data)
+            book = update_book_by_id(book_old, return_book=True)
             return schema.dump(book), 200
 
 
