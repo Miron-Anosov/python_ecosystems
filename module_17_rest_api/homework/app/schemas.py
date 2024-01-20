@@ -63,7 +63,7 @@ class AuthorIDValidator(Schema):
             raise ValidationError(f"Author with ID: '{author_id}' is not exists.")
 
     @post_load
-    def return_book_id(self, data: dict, **_) -> int:
+    def return_author_id(self, data: dict, **_) -> int:
         return data.get('author_id')
 
 
@@ -76,4 +76,16 @@ class AuthorExistsValidator(Schema):
     @validates_schema
     def validate_title(self, author_data, **_) -> None:
         if check_author_in_bd(**author_data):
-            raise ValidationError(f"Author with name '{author_data}' already exists, please use a different name.")
+            raise ValidationError(f"Author with data '{author_data}' already exists, please use a different data.")
+
+
+class BookTypeValidate(Schema):
+    id = fields.Int(required=False)
+    title = fields.Str(required=False)
+    first_name = fields.Str(required=False)
+    last_name = fields.Str(required=False)
+    middle_name = fields.Str(required=False)
+
+    @post_load
+    def return_valid_type(self, data: dict, **_):
+        return data
