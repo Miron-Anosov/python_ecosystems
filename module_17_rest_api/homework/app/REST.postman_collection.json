@@ -186,7 +186,7 @@
 			"response": []
 		},
 		{
-			"name": "api/books/ update_book_negative",
+			"name": "api/books/ update book (id is empty) negative",
 			"request": {
 				"method": "PATCH",
 				"header": [],
@@ -200,6 +200,60 @@
 					}
 				},
 				"url": "http://127.0.0.1:5000/api/books/4"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ update only middle name",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"middle_name\": \"Nikolaevich\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books/3"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ update empty",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books/3"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/  invalid key negative",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"middlename\": \"Nikolaevich\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books/3"
 			},
 			"response": []
 		},
@@ -334,7 +388,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "http://127.0.0.1:5000/api/authors/3"
+				"url": "http://127.0.0.1:5000/api/authors/5"
 			},
 			"response": []
 		}
