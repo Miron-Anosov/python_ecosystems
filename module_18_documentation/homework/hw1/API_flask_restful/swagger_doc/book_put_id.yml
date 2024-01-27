@@ -1,0 +1,39 @@
+This is an endpoint for patch info about book by ID
+---
+tags:
+  - Books
+parameters:
+  - in: path
+    name: id
+    schema:
+      type: integer
+    required: true
+    description: ID books
+  - in: body
+    name: dataBook
+    description: data for a book
+    required: true
+    schema:
+      type: object
+      properties:
+        first_name:
+          type: string
+          required: true
+        last_name:
+          type: string
+          required: true
+        middle_name:
+          type: string
+          required: true
+          description: middle_name may be an empty string.
+        title:
+          type: string
+          required: true
+responses:
+  201:
+    description: Create new book. No Content.
+  204:
+    description: Update book. No Content.
+  400:
+    description: Validator Error.
+description: You can create a new book if it not in database else the book will be updated.
