@@ -1,7 +1,14 @@
 from flasgger import Schema, fields, ValidationError
 from marshmallow import validates, post_load, validates_schema
 
-from models import check_book, Book, get_truth_book_id, get_truth_author_id, Author, check_author_in_bd
+from module_18_documentation.homework.hw1.API_flask_restful.models import (
+    check_book,
+    Book,
+    get_truth_book_id,
+    get_truth_author_id,
+    Author,
+    check_author_in_bd
+)
 
 
 class BookSchema(Schema):
