@@ -1,0 +1,396 @@
+{
+	"info": {
+		"_postman_id": "17ecea04-671f-4d0d-a9c6-8a325ffe03ce",
+		"name": "REST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29431301"
+	},
+	"item": [
+		{
+			"name": "api/books/ get_books",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/books"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ create book first author",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\": \"Эгоистичный Ген\", \"last_name\": \"Докинз\", \"first_name\": \"Ричард\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ create book old author and new book",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\": \"Анна Коренина\", \"last_name\": \"Tolstoy\", \"first_name\": \"Leo\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ create book  negative",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "// {\"title\": \"Эгоистичный Ген\", \"last_name\": \"Докинз\", \"first_name\": \"Ричард\"}\r\n{\"title\": \"Анна Коренина\", \"last_name\": \"Tolstoy\", \"first_name\": \"Leo\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ delete book by id positive",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/books/4",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"books",
+						"4"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ delete book by id negative",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/books/999"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ delete book by id negative",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/books/0",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"books",
+						"0"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ get book by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/books/1"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ get book by id negative",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/books/9999"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ get book by id negative",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/books/0"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ update_book",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\": \"Anna Korenina\", \"last_name\": \"Tolstoy\", \"first_name\": \"Leo\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books/5"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ update book (id is empty) negative",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\": \"The Selfish Gene\", \"last_name\": \"Dawkins\", \"first_name\": \"Richard\"}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books/4"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ update only middle name",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"middle_name\": \"Nikolaevich\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books/3"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ update empty",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books/3"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/  invalid key negative",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"middlename\": \"Nikolaevich\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books/3"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ upgreate_book_new_book",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\": \"Эгоистичный Ген\", \"last_name\": \"Докинз\", \"first_name\": \"Ричард\"}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books/4"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ upgreate_book",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\": \"The Selfish Gene\", \"last_name\": \"Dawkins\", \"first_name\": \"Richard\"}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books/6"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ upgreate book again status 204",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\": \"Эгоистичный Ген\", \"last_name\": \"Докинз\", \"first_name\": \"Ричард\"}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/books/6"
+			},
+			"response": []
+		},
+		{
+			"name": "api/authors/ create author",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"first_name\": \"Ivan\",\r\n  \"last_name\": \"Ivanov\",\r\n  \"middle_name\": \"Ivanovich\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/api/authors/"
+			},
+			"response": []
+		},
+		{
+			"name": "api/authors/ del new author positive",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/authors/5"
+			},
+			"response": []
+		},
+		{
+			"name": "api/authors/ del new author negative",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/authors/5"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ get book by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/books/6"
+			},
+			"response": []
+		},
+		{
+			"name": "api/authors/ del  author and his books",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/authors/4"
+			},
+			"response": []
+		},
+		{
+			"name": "api/books/ get_book by id negative",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/books/6"
+			},
+			"response": []
+		},
+		{
+			"name": "api/authors/ get author",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/authors/3"
+			},
+			"response": []
+		},
+		{
+			"name": "api/authors/ get author negative",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/api/authors/5"
+			},
+			"response": []
+		}
+	]
+}
