@@ -1,0 +1,134 @@
+swagger: "2.0"
+info:
+  title: JSON-RPC API
+  version: 0.0.1
+  description: > 
+    ## Задача 3. Создание калькулятора JSON-RPC<br>
+    
+    ### Что нужно сделать
+    1. Напишите калькулятор на базе JSON-RPC для двух переменных. Он должен поддерживать базовые операции:
+      * сложение,
+      * вычитание,
+      * умножение
+      * деление.
+    2. Оформите документацию для него.
+
+    ### Советы и рекомендации
+      * Вы можете опираться на пример реализации простого приложения с использованием библиотеки [Flask JSON-RPC](https://github.com/cenobites/flask-jsonrpc). Он описан [в этой статье](https://habr.com/ru/post/440944/).
+      * Для аннотации методов в документации используйте [ключевое слово enum](https://swagger.io/docs/specification/data-models/enums/).
+
+    ### Что оценивается
+      * Приложение реализовано по спецификации JSON-RPC.
+      * Предусмотрена обработка ошибок и возвращение соответствующего кода состояния HTTP.
+      * Присутствует документация к написанному endpoint.
+
+
+host: http://127.0.0.1:5000
+schemes:
+  - http
+
+paths:
+  /api:
+    post:
+      description: This endpoint calls a method that performs calculators.
+      summary: Calculator
+      tags:
+        - JSONRPC
+      consumes:
+        - application/vnd.api+json
+      produces:
+        - application/vnd.api+json
+      parameters:
+        - in: body
+          name: Calculator
+          description: data for Calculator
+          required: true
+          schema:
+            $ref: '#/definitions/CalculatorRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CalculatorResponse'
+        400:
+          description: BAD REQUEST
+          schema:
+            $ref: '#/definitions/BadResponse'
+
+
+definitions:
+  CalculatorRequest:
+    type: object
+    properties:
+      jsonrpc:
+        type: string
+        required: true
+        default: "2.0"
+        enum: [ "2.0" ]
+      method:
+        type: string
+        required: true
+        enum:
+          - calc.mul
+          - calc.add
+          - calc.sub
+          - calc.div
+      params:
+        type: object
+        required: true
+        properties:
+          a:
+            type: integer
+            required: true
+          b:
+            type: integer
+            required: true
+      id:
+        type: integer
+        required: true
+
+  CalculatorResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+        required: true
+      jsonrpc:
+        type: string
+        required: true
+        default: "2.0"
+        enum: [ "2.0" ]
+      result:
+        type: integer
+        required: true
+
+  BadResponse:
+    type: object
+    properties:
+      error:
+        type: object
+        properties:
+          code: integer
+          data:
+            type: object
+            properties:
+              message:
+                type: array
+                items:
+                  type: string
+          executable:
+            type: string
+          message:
+            type: string
+          name:
+            type: string
+          stack:
+            type: string
+      id:
+        type: integer
+        required: true
+      jsonrpc:
+        type: string
+        required: true
+        default: "2.0"
+        enum: [ "2.0" ]
