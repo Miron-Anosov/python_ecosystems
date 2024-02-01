@@ -3,7 +3,7 @@ from flask_restx import Api, Resource, fields, Namespace
 from marshmallow import ValidationError
 from werkzeug.serving import WSGIRequestHandler
 
-from models import (
+from module_18_documentation.homework.hw1.API_flask_restx.models import (
     DATA,
     get_all_books,
     init_db,
@@ -15,16 +15,25 @@ from models import (
     get_author_by_id,
     add_author, Book,
 )
-from schemas import (BookSchema,
-                     BookIDValidator,
-                     ValidatorExistsBook,
-                     AuthorIDValidator,
-                     AuthorSchema,
-                     AuthorExistsValidator, BookTypeValidate)
+from module_18_documentation.homework.hw1.API_flask_restx.schemas import (
+    BookSchema,
+    BookIDValidator,
+    ValidatorExistsBook,
+    AuthorIDValidator,
+    AuthorSchema,
+    AuthorExistsValidator,
+    BookTypeValidate)
 
 app = Flask(__name__)
+# app.config['SESSION_REFRESH_EACH_REQUEST'] = False
+# app.config['TIMEOUT'] = 10
+# app.config['KEEP_ALIVE_TIMEOUT'] = 30
+# app.config['SERVER_NAME'] = '127.0.0.1:5000'
+
 
 WSGIRequestHandler.protocol_version = "HTTP/1.1"
+# WSGIRequestHandler.close_connection = False
+
 
 with open('../README.md', 'r', encoding='UTF-8') as file:
     doc = file.read()
@@ -275,4 +284,4 @@ class AuthorPost(Resource):
 
 if __name__ == '__main__':
     init_db(initial_records=DATA)
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)
