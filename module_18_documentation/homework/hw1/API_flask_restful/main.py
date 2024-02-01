@@ -4,9 +4,9 @@ from apispec_webframeworks.flask import FlaskPlugin
 from flasgger import APISpec, Swagger, swag_from
 from flask_restful import Api, Resource
 from marshmallow import ValidationError
+from werkzeug.serving import WSGIRequestHandler
 
-
-from models import (
+from module_18_documentation.homework.hw1.API_flask_restful.models import (
     DATA,
     get_all_books,
     init_db,
@@ -20,12 +20,14 @@ from models import (
 )
 from module_18_documentation.homework.hw1.API_flask_restful.swag_decor_util import swagger_doc_from_json_to_pydict
 from module_18_documentation.homework.hw1.API_flask_restful.swagger_doc.author_del import author_del
-from schemas import (BookSchema,
-                     BookIDValidator,
-                     ValidatorExistsBook,
-                     AuthorIDValidator,
-                     AuthorSchema,
-                     AuthorExistsValidator, BookTypeValidate)
+from module_18_documentation.homework.hw1.API_flask_restful.schemas import (
+    BookSchema,
+    BookIDValidator,
+    ValidatorExistsBook,
+    AuthorIDValidator,
+    AuthorSchema,
+    AuthorExistsValidator,
+    BookTypeValidate)
 
 TITLE = 'API Library Books'
 VERSION = '0.1.01.alpha'
@@ -34,6 +36,8 @@ PREFIX = '/api'
 
 app = Flask(__name__)
 api = Api(app=app, prefix=PREFIX)
+
+# WSGIRequestHandler.protocol_version = "HTTP/1.1"
 
 spec = APISpec(title=TITLE, version=VERSION, openapi_version=OPENAPI_V, plugins=[FlaskPlugin(), MarshmallowPlugin()], )
 template = spec.to_flasgger(app, definitions=[BookSchema, AuthorSchema, ])
@@ -190,4 +194,4 @@ api.add_resource(AuthorPost, '/authors')
 
 if __name__ == '__main__':
     init_db(initial_records=DATA)
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
