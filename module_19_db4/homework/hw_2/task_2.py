@@ -16,7 +16,7 @@ with sqlite3.connect('../../homework.db') as conn:
     GROUP BY 
         students.student_id
     ORDER BY
-        assignments_grades.grade DESC
+        AVG(assignments_grades.grade) DESC
     LIMIT 10;
 
     """
