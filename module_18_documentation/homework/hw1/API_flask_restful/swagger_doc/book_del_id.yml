@@ -1,0 +1,18 @@
+This is an endpoint for delete only book.
+---
+tags:
+  - Books
+parameters:
+  - in: path
+    name: id
+    schema:
+      fav_number:
+        type: integer
+    required: true
+    description: "book's ID"
+responses:
+  204:
+    description:  No Content
+  400:
+    description: Validation Error.
+description: You can delete a book in database.

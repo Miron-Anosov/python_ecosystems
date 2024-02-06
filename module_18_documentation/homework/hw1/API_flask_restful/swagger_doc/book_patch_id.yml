@@ -1,0 +1,37 @@
+This is an endpoint for patch info about book by ID
+---
+tags:
+  - Books
+parameters:
+  - in: path
+    name: id
+    schema:
+      type: integer
+    required: true
+    description: ID books
+  - in: body
+    name: dataBook
+    description: data for a book
+    required: true
+    schema:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        middle_name:
+          type: string
+          description: middle_name may be an empty string
+        title:
+          type: string
+responses:
+  200:
+    description:  Book is updated.
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Book'
+  400:
+    description: Validator Error
+description: You can update a book in database.

@@ -1,0 +1,21 @@
+This is an endpoint for get info about book by ID
+---
+tags:
+  - Books
+parameters:
+- in: path
+  name: id
+  schema:
+    type: integer
+  required: true
+  description: ID book
+responses:
+  200:
+    description: Book data
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Book'
+  400:
+    description: Validation Error.
+description: You can get a book by ID.

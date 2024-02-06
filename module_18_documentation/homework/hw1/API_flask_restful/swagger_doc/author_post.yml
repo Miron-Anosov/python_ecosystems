@@ -1,0 +1,33 @@
+
+This is an endpoint for obtaining the books list.
+---
+tags:
+  - Authors
+parameters:
+  - in: body
+    name: authorData
+    description: Data of the author
+    required: true
+    schema:
+      type: object
+      properties:
+        first_name:
+          type: string
+          required: true
+        last_name:
+          type: string
+          required: true
+        middle_name:
+          type: string
+          required: true
+          description: middle_name may be empty string
+responses:
+  201:
+    description: Books data
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Author'
+  400:
+    description: Validation Error.
+description: You can create an author in the database by providing their first name and last name.

@@ -1,0 +1,21 @@
+This is an endpoint for get info about author by ID
+---
+tags:
+  - Authors
+parameters:
+- in: path
+  name: id
+  schema:
+    type: integer
+  required: true
+  description: ID author
+responses:
+  200:
+    description: Author data
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Author'
+  400:
+    description: Validation Error.
+description: You can get an author by ID.
