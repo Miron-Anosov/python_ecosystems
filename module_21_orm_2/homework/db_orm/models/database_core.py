@@ -4,7 +4,7 @@ from sqlalchemy.orm import DeclarativeBase, mapped_column, declared_attr, Mapped
 
 url_sqlite_def = 'sqlite+pysqlite:///library.db'
 
-int_pr_key_type = Annotated[int, mapped_column(primary_key=True)]
+int_pr_key_type = Annotated[int, mapped_column(primary_key=True, autoincrement=True)]
 int_def_1_type = Annotated[int, mapped_column(default=1)]
 
 
@@ -12,10 +12,10 @@ def get_engine(url: str = url_sqlite_def) -> Engine:
     return create_engine(url=url, echo=True)
 
 
-_engine = get_engine()
+engine = get_engine()
 
 
-def session_orm(bild=_engine) -> sessionmaker[Session]:
+def session_orm(bild=engine) -> sessionmaker[Session]:
     return sessionmaker(bind=bild)
 
 
