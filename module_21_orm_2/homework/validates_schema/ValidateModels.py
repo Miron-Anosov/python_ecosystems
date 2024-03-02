@@ -39,13 +39,14 @@ class CollectionBooksSchema(BaseModel):
 
 class StudentSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
-    id: int = Field(gt=0)
+    id: int = Field(gt=0, default=None)
     name: str = Field(min_length=1)
     surname: str = Field(min_length=1)
     phone: str = Field(min_length=2)
     email: str = Field(pattern=r'\b\w+@\w+\.\w+\b')
     average_score: float
     scholarship: bool
+    book_list: list[BookSchema] | None = Field(default=None, alias='books')
 
 
 class CollectionStudentsSchema(BaseModel):
@@ -63,3 +64,17 @@ class ReceivingBooksSchema(BaseModel):
 class ReceivingBooksInputValidate(BaseModel):
     book_id: int = Field(gt=0)
     student_id: int = Field(gt=0)
+
+
+class AuthorsSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    surname: str
+    books: list[BookSchema] | None = None
+    count_books: int | None = None
+
+
+class AuthorsCollectionSchema(BaseModel):
+    authors: list[AuthorsSchema]
