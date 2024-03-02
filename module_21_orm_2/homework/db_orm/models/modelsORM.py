@@ -2,13 +2,15 @@ import datetime
 
 from typing import Optional
 
-from sqlalchemy import func, Integer
-from sqlalchemy.orm import Mapped
-from module_20_orm_1.homework.db_orm.models.database_core import BaseModelORM, int_def_1_type
+from sqlalchemy import func, Integer, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from module_21_orm_2.homework.db_orm.models.database_core import BaseModelORM, int_def_1_type
 from sqlalchemy.ext.hybrid import hybrid_property
 
+from module_21_orm_2.homework.db_orm.models.database_core import engine
 
-class Books(BaseModelORM):
+
+class BooksTable(BaseModelORM):
     """
     -- таблица книг в библиотеке books
     CREATE TABLE IF NOT EXISTS books (
@@ -18,13 +20,21 @@ class Books(BaseModelORM):
     release_date date not null,
     author_id int not null)
     """
+    __table_args__ = {'extend_existing': True}
+    __tablename__ = 'books'  # noqa
+
     name: Mapped[str]
     count: Mapped[int_def_1_type]
     release_date: Mapped[datetime.datetime]
-    author_id: Mapped[int]
+    author_id: Mapped[int] = mapped_column(ForeignKey('authors.id'))
+
+    authors: Mapped[list['AuthorsTable']] = relationship(back_populates='books')
+
+    students_have_books: Mapped[list['StudentsTable']] = relationship(back_populates='books_list',
+                                                                      secondary='receiving_books')
 
 
-class Authors(BaseModelORM):
+class AuthorsTable(BaseModelORM):
     """
     -- таблица авторов authors
     CREATE TABLE IF NOT EXISTS authors (
@@ -33,11 +43,20 @@ class Authors(BaseModelORM):
     surname text NOT NULL
     )
     """
+    __table_args__ = {'extend_existing': True}
+    __tablename__ = 'authors'  # noqa
+
     name: Mapped[str]
     surname: Mapped[str]
 
+    books: Mapped[list['BooksTable']] = relationship(back_populates='authors')
 
-class Students(BaseModelORM):
+    @property
+    def count_books(self):
+        return sum(book.count for book in self.books)
+
+
+class StudentsTable(BaseModelORM):
     """
     -- таблица читателей students
     CREATE TABLE IF NOT EXISTS students (
@@ -50,6 +69,9 @@ class Students(BaseModelORM):
     scholarship boolean NOT NULL
     )
     """
+    __table_args__ = {'extend_existing': True}
+    __tablename__ = 'students'  # noqa
+
     name: Mapped[str]
     surname: Mapped[str]
     phone: Mapped[str]
@@ -57,8 +79,11 @@ class Students(BaseModelORM):
     average_score: Mapped[float]
     scholarship: Mapped[bool]
 
+    books_list: Mapped[list['BooksTable'] | None] = relationship(back_populates='students_have_books',
+                                                                 secondary='receiving_books')
 
-class ReceivingBooks(BaseModelORM):
+
+class ReceivingBooksTable(BaseModelORM):
     """
     -- таблица выдачи книг студентам receiving_books
     CREATE TABLE IF NOT EXISTS receiving_books (
@@ -69,10 +94,12 @@ class ReceivingBooks(BaseModelORM):
     date_of_return datetime
     )
     """
-    __tablename__ = 'receiving_books'
-    book_id: Mapped[int]
-    student_id: Mapped[int]
-    date_of_issue: Mapped[datetime.datetime]
+    __table_args__ = {'extend_existing': True}
+    __tablename__ = 'receiving_books'  # noqa
+
+    book_id: Mapped[int] = mapped_column(ForeignKey('books.id', ondelete='CASCADE'))
+    student_id: Mapped[int] = mapped_column(ForeignKey('students.id', ondelete='CASCADE'))
+    date_of_issue: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     date_of_return: Mapped[Optional[datetime.datetime]]
 
     @hybrid_property
@@ -85,3 +112,7 @@ class ReceivingBooks(BaseModelORM):
         if self.date_of_issue:
             return func.cast(func.julianday(func.now()) - func.julianday(self.date_of_issue), Integer)
         return
+
+
+def create_all_tables():
+    BaseModelORM.metadata.create_all(bind=engine)
