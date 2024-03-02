@@ -12,10 +12,10 @@ def get_engine(url: str = url_sqlite_def) -> Engine:
     return create_engine(url=url, echo=True)
 
 
-_engine = get_engine()
+engine = get_engine()
 
 
-def session_orm(bild=_engine) -> sessionmaker[Session]:
+def session_orm(bild=engine) -> sessionmaker[Session]:
     return sessionmaker(bind=bild)
 
 
