@@ -4,7 +4,7 @@ from sqlalchemy.orm import DeclarativeBase, mapped_column, declared_attr, Mapped
 
 url_sqlite_def = 'sqlite+pysqlite:///library.db'
 
-int_pr_key_type = Annotated[int, mapped_column(primary_key=True)]
+int_pr_key_type = Annotated[int, mapped_column(primary_key=True, autoincrement=True)]
 int_def_1_type = Annotated[int, mapped_column(default=1)]
 
 
