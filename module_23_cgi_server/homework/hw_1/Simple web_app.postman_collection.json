@@ -1,0 +1,145 @@
+{
+	"info": {
+		"_postman_id": "e3dac081-fa71-456f-827e-378d4f35378c",
+		"name": "Simple web_app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29431301"
+	},
+	"item": [
+		{
+			"name": "not found",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "only hello",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1/hello/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"hello",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "hello plus anythings",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1/hello/skiilbox/python",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"hello",
+						"skiilbox",
+						"python"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "hello with params",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1/hello/skiilbox/python?price=100&discont=5",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"hello",
+						"skiilbox",
+						"python"
+					],
+					"query": [
+						{
+							"key": "price",
+							"value": "100"
+						},
+						{
+							"key": "discont",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "env",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1/env",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"env"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post for test",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
