@@ -9,7 +9,7 @@ RUN pip install -r /app/requirements.txt
 COPY app/app.py /app/
 
 COPY nginx.conf /etc/nginx/
-COPY app/flask_http.conf /etc/nginx/conf.d/
+COPY app/flask_socket.conf /etc/nginx/conf.d/
 COPY uwsgi.ini /etc/uwsgi/uwsgi.ini
 COPY supervisord.ini /etc/supervisor/conf.d/supervisord.ini
 
