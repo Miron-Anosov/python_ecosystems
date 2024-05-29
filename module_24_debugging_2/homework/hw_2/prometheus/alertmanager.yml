@@ -1,0 +1,65 @@
+global:
+  resolve_timeout: 5m
+  telegram_api_url: "https://api.telegram.org"
+  smtp_from: your_email
+  smtp_smarthost: your_email
+  smtp_hello: "host_backend_app"
+  smtp_auth_username: your_email
+  smtp_auth_password: your_pass_secret_string
+  smtp_require_tls: true
+  smtp_auth_identity: your_email
+
+
+templates:
+  - '/etc/alertmanager/*.tmpl'
+
+receivers:
+  - name: blackhole
+
+  - name: telegram-test
+    telegram_configs:
+      - chat_id: your_chat_id_without_brackets
+#        bot_token: '${TELEGRAM_BOT_TOKEN}' данным образом у меня не получилось извлечь переменную из env
+        bot_token: your_token_without_brackets_secret_string
+        api_url: "https://api.telegram.org"
+        send_resolved: true
+        parse_mode: HTML
+        message: '{{ template "telegram.default" . }}'
+
+  - name: 'email-receiver-warning'
+    email_configs:
+      - to: to_address_email_string
+        send_resolved: true
+
+  - name: 'email-receiver-critical'
+    email_configs:
+      - to: 'skillbox@yopmail.com'
+        send_resolved: true
+
+
+route:
+  group_by: [ 'alertname', 'job' ]
+  group_wait: 30s
+  group_interval: 2m
+  repeat_interval: 2h
+  receiver: telegram-test
+  routes:
+    - receiver: telegram-test
+      continue: true
+      matchers:
+        - job=~"flask_api|requestmaker"
+        - severity=~"critical|warning"
+
+    - receiver: email-receiver-warning
+      group_wait: 10s
+      matchers:
+        - severity="warning"
+
+    - receiver: email-receiver-critical
+      group_wait: 5s
+      matchers:
+        - severity="critical"
+
+    - receiver: blackhole
+      matchers:
+        - alertname="Watchdog"
