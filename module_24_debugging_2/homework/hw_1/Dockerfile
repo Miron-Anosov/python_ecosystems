@@ -1,12 +1,13 @@
-FROM ubuntu:latest
+FROM python:3.12-slim
 LABEL authors="miron"
+
+RUN apt-get update && \
+    apt-get install -y python3-pip
 
 COPY requirements.txt /app/
 COPY application_flask.py /app/
-COPY sentry_install.bash /sentry/
 
 RUN pip install -r /app/requirements.txt
-RUN bash /sentry/sentry_install.bash
 
 WORKDIR /app/
-CMD ["python3", "-m", "application_flask.py"]
+CMD ["python3.12", "-m", "application_flask", "--host=0.0.0.0"]
