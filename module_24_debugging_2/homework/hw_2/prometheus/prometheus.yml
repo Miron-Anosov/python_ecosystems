@@ -1,0 +1,40 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'monitor-GRAFANA'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+
+rule_files:
+  - "ContainerKilled.yml"
+  - "InstanceDown.yml"
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: [ 'prometheus:9090' ]
+
+  - job_name: flask_api
+    static_configs:
+      - targets: [ 'flask_api:5000' ]
+
+  - job_name: node exporter
+    static_configs:
+      - targets: [ 'node_exporter:9100' ]
+
+  - job_name: cadvisor
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - cadvisor:8080
+
+  - job_name: requestmaker
+    static_configs:
+      - targets:
+          - requestmaker:8000
