@@ -71,6 +71,22 @@ async def update_item(
     return results
 
 
+@app.put("/items4/{item_id}")
+async def update_item(item_id: int, item: Annotated[Item, Body(embed=True)]):
+    """
+    Добавление одного body-параметра¶
+    Предположим, у вас есть только один body-параметр item из Pydantic модели Item.
+    По умолчанию, FastAPI ожидает получить тело запроса напрямую.
+    Но если вы хотите чтобы он ожидал JSON с ключом item с содержимым модели внутри, также как это происходит при
+    объявлении дополнительных body-параметров, вы можете использовать специальный параметр embed у типа Body.
+    С embed=True:
+    Когда вы используете Body(embed=True), FastAPI ожидает, что JSON будет иметь дополнительный уровень вложенности,
+    где данные модели Item находятся под ключом item
+    """
+    results = {"item_id": item_id, "item": item}
+    return results
+
+
 " http://127.0.0.1:8000/openapi.json"
 " http://127.0.0.1:8000/docs"
 " http://127.0.0.1:8000/redoc"
