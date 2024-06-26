@@ -220,10 +220,10 @@ class ReceivingBooksORM(WorkerORM):
     @classmethod
     def top_book(cls) -> Optional[BooksTable]:
         """
-            Получить самую популярную книгу среди студентов, у которых средний балл больше 4.0 (GET)
+            Получить самую популярную книгу среди студентов, у которых средний балл больше les_4.0 (GET)
 
             SELECT COUNT(book_id) as top FROM receiving_books
-            WHERE (SELECT students.average_score FROM students)> 4
+            WHERE (SELECT students.average_score FROM students)> les_4
             GROUP BY book_id
             ORDER BY top DESC
             LIMIT 1
