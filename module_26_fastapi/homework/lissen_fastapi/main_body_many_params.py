@@ -47,6 +47,30 @@ async def update_item(item_id: int, item: Item, user: User):
     return results
 
 
+@app.put("/items3/{item_id}")
+async def update_item(
+        *,
+        item_id: int,
+        item: Item,
+        user: User,
+        importance: Annotated[int, Body(gt=0)],
+        q: str | None = None,
+):
+    """
+    Множество body и query параметров
+
+    Конечно, вы также можете объявлять query-параметры в любое время, дополнительно к любым body-параметрам.
+    Поскольку по умолчанию, отдельные значения интерпретируются как query-параметры, вам не нужно явно добавлять Query.
+
+    Body также имеет все те же дополнительные параметры валидации и метаданных, как у Query, Path и других, которые
+    вы увидите позже.
+    """
+    results = {"item_id": item_id, "item": item, "user": user, "importance": importance}
+    if q:
+        results.update({"q": q})
+    return results
+
+
 " http://127.0.0.1:8000/openapi.json"
 " http://127.0.0.1:8000/docs"
 " http://127.0.0.1:8000/redoc"
