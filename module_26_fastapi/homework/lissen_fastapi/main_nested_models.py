@@ -44,6 +44,15 @@ class ItemWithImage(BaseModel):
     image: Image | None = None
 
 
+class ItemWithCollectionPyModels(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+    tags: set[str] = set()
+    images: list[Image] | None = None
+
+
 @app.put("/items/{item_id}")
 async def update_item(item_id: int, item: Item):
     """
@@ -80,5 +89,12 @@ async def update_item(item_id: int, item: ItemWithImage):
     У каждого атрибута Pydantic-модели есть тип.
     Но этот тип может сам быть другой моделью Pydantic.
     """
+    results = {"item_id": item_id, "item": item}
+    return results
+
+
+@app.put("/items5/{item_id}")
+async def update_item(item_id: int, item: Item):
+    """Вы также можете использовать модели Pydantic в качестве типов вложенных в list, set и т.д"""
     results = {"item_id": item_id, "item": item}
     return results
