@@ -1,6 +1,6 @@
 from typing import Annotated, Union
 
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, Path, Body
 from pydantic import BaseModel
 
 
@@ -39,7 +39,7 @@ async def update_item(
     return results
 
 
-@app.put("/items/{item_id}")
+@app.put("/items2/{item_id}")
 async def update_item(item_id: int, item: Item, user: User):
     """Обратите внимание, что хотя параметр item был объявлен таким же способом, как и раньше, теперь предполагается,
     что он находится внутри тела с ключом item."""
