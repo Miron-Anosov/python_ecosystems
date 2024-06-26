@@ -94,7 +94,7 @@ async def update_item(item_id: int, item: ItemWithImage):
 
 
 @app.put("/items5/{item_id}")
-async def update_item(item_id: int, item: Item):
+async def update_item(item_id: int, item: ItemWithCollectionPyModels):
     """Вы также можете использовать модели Pydantic в качестве типов вложенных в list, set и т.д"""
     results = {"item_id": item_id, "item": item}
     return results
