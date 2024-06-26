@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from typing import Annotated
+
+from fastapi import FastAPI, Body
 from pydantic import BaseModel, Field
 
 app = FastAPI()
@@ -54,7 +56,29 @@ async def update_item(item_id: int, item: Item):
 
 
 @app.put("/items2/{item_id}")
-async def update_item(item_id: int, item: ItemTwo):
+async def update_item2(item_id: int, item: ItemTwo):
     """Использование Field(examples=[<any>])"""
+    results = {"item_id": item_id, "item": item}
+    return results
+
+
+@app.put("/items3/{item_id}")
+async def update_item(
+    item_id: int,
+    item: Annotated[
+        Item,
+        Body(
+            examples=[
+                {
+                    "name": "Foo",
+                    "description": "A very nice Item",
+                    "price": 35.4,
+                    "tax": 3.2,
+                }
+            ],
+        ),
+    ],
+):
+    """Способ расширять документацию с помощью Annotated и Body. Удобно, если нельзя изменять объект."""
     results = {"item_id": item_id, "item": item}
     return results
