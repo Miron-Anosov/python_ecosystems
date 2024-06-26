@@ -75,7 +75,7 @@ async def update_item(item_id: int, item: ItemWithSetCollection):
 
 
 @app.put("/items4/{item_id}")
-async def update_item(item_id: int, item: Item):
+async def update_item(item_id: int, item: ItemWithImage):
     """
     У каждого атрибута Pydantic-модели есть тип.
     Но этот тип может сам быть другой моделью Pydantic.
