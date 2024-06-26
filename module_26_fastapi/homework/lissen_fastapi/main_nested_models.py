@@ -53,6 +53,13 @@ class ItemWithCollectionPyModels(BaseModel):
     images: list[Image] | None = None
 
 
+class Offer(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    items: list[ItemWithCollectionPyModels]
+
+
 @app.put("/items/{item_id}")
 async def update_item(item_id: int, item: Item):
     """
@@ -98,3 +105,12 @@ async def update_item(item_id: int, item: ItemWithCollectionPyModels):
     """Вы также можете использовать модели Pydantic в качестве типов вложенных в list, set и т.д"""
     results = {"item_id": item_id, "item": item}
     return results
+
+
+@app.post("/offers/")
+async def create_offer(offer: Offer):
+    """
+    Заметьте, что у объекта Offer есть список объектов Item, которые, в свою очередь,
+    могут содержать необязательный список объектов Image
+    """
+    return offer
