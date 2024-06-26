@@ -1,7 +1,7 @@
 from typing import Union, List
 
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 
 app = FastAPI()
 
@@ -31,7 +31,7 @@ class ItemWithSetCollection(BaseModel):
 
 
 class Image(BaseModel):
-    url: str
+    url: HttpUrl
     name: str
 
 
