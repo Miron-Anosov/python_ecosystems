@@ -114,3 +114,13 @@ async def create_offer(offer: Offer):
     могут содержать необязательный список объектов Image
     """
     return offer
+
+
+@app.post("/images/multiple/")
+async def create_multiple_images(images: list[Image]):
+    """
+    Тела с чистыми списками элементов
+    Если верхний уровень значения тела JSON-объекта представляет собой JSON array (в Python - list),
+    вы можете объявить тип в параметре функции, так же, как в моделях Pydantic:
+    """
+    return images
