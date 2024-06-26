@@ -30,6 +30,20 @@ class ItemWithSetCollection(BaseModel):
     tags: set[str] = set()
 
 
+class Image(BaseModel):
+    url: str
+    name: str
+
+
+class ItemWithImage(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+    tags: set[str] = set()
+    image: Image | None = None
+
+
 @app.put("/items/{item_id}")
 async def update_item(item_id: int, item: Item):
     """
@@ -55,6 +69,16 @@ async def update_item(item_id: int, item: ItemWithSetCollection):
     """
     С помощью этого, даже если вы получите запрос с повторяющимися данными, они будут преобразованы в множество
     уникальных элементов.
+    """
+    results = {"item_id": item_id, "item": item}
+    return results
+
+
+@app.put("/items4/{item_id}")
+async def update_item(item_id: int, item: Item):
+    """
+    У каждого атрибута Pydantic-модели есть тип.
+    Но этот тип может сам быть другой моделью Pydantic.
     """
     results = {"item_id": item_id, "item": item}
     return results
