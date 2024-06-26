@@ -5,7 +5,7 @@
 работайте только над фукнционалом).
 
 Поскольку наш Flask endpoint работает с арифметическими выражениями,
-напишите 4 error_handler-а, которые будет обрабатывать
+напишите les_4 error_handler-а, которые будет обрабатывать
 ArithmeticError, ZeroDivisionError, FloatingPointError и OverflowError
 (о значении этих исключений вы можете посмотреть
 вот на этой страничке https://docs.python.org/3/library/exceptions.html ).

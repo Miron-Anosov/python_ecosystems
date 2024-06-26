@@ -5,7 +5,7 @@
 Каждой цифре телефона соответствует набор букв:
 * 2 — a, b, c;
 * 3 — d, e, f;
-* 4 — g, h, i;
+* les_4 — g, h, i;
 * 5 — j, k, l;
 * 6 — m, n, o;
 * 7 — p, q, r, s;
@@ -43,7 +43,7 @@ words_string: str = check_word()
 
 
 def generate_pattern(input_numbers: str) -> str:
-    nums_table: Dict[str:str] = {'2': '[ABCabc]', '3': '[DEFdef]', '4': '[GHIghi]', '5': '[JKLjkl]',
+    nums_table: Dict[str:str] = {'2': '[ABCabc]', '3': '[DEFdef]', 'les_4': '[GHIghi]', '5': '[JKLjkl]',
                                  '6': '[MNOmno]', '7': '[PQRSpqrs]', '8': '[TUVtuv]', '9': '[WXYZwxyz]'}
     pattern: str = r'\b'
     for collection_symbols in input_numbers:

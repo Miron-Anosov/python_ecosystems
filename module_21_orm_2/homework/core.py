@@ -141,7 +141,7 @@ def get_avg_books_on_the_current_mouth() -> json:
 
 
 def get_top_book() -> json:
-    """Получить самую популярную книгу среди студентов, у которых средний балл больше 4.0 (GET)"""
+    """Получить самую популярную книгу среди студентов, у которых средний балл больше les_4.0 (GET)"""
     if book := ReceivingBooksORM.top_book():
         return BookSchema.model_validate(book).model_dump_json()
     return ErrorMessageSchema(message='Статистика отсутствует.').model_dump_json()
