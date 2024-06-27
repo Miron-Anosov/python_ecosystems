@@ -1,6 +1,7 @@
 # Response Model - Return Type
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
+from fastapi.responses import  JSONResponse, RedirectResponse
 from pydantic import BaseModel, EmailStr
 
 from typing import Any
@@ -107,3 +108,11 @@ async def create_user(user: UserInput) -> BaseUser:
     """FastApi поймет что нужно вернуть BaseUser, хотя явно мы передаем UserIn. Тем самым мы не передадим пароль.
     В случе, если пыпытаемся отдавать модель без наследования, будет нарушена типизация"""
     return user
+
+
+@app.get("/portal")
+async def get_portal(teleport: bool = False) -> Response:
+    if teleport:
+        return RedirectResponse(url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    return JSONResponse(content={"message": "Here's your interdimensional portal."})
+
