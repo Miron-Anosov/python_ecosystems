@@ -40,3 +40,30 @@ async def create_upload_file(file: UploadFile):
 Для объявления тела файла необходимо использовать File, поскольку в противном случае параметры будут интерпретироваться 
 как параметры запроса или параметры тела (JSON).
 """
+
+
+###################################################################
+
+@app.post("/files2/")
+async def create_file(file: Annotated[bytes | None, File()] = None):
+    if not file:
+        return {"message": "No file sent"}
+    else:
+        return {"file_size": len(file)}
+
+
+"""
+Необязательная загрузка файлов
+Вы можете сделать загрузку файла необязательной, используя стандартные аннотации типов и установив значение 
+по умолчанию None
+"""
+
+
+@app.post("/uploadfile2/")
+async def create_upload_file(file: UploadFile | None = None):
+    if not file:
+        return {"message": "No upload file sent"}
+    else:
+        return {"filename": file.filename}
+
+
