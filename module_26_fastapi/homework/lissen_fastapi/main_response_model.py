@@ -73,3 +73,12 @@ async def read_items() -> Any:
         {"name": "Portal Gun", "price": 42.0},
         {"name": "Plumbus", "price": 32.0},
     ]
+
+
+@app.post("/user/", response_model=UserOut)
+async def create_user(user: UserIn) -> Any:
+    """
+    Мы указали в response_model модель UserOut, в которой отсутствует поле,
+    содержащее пароль - и он будет исключен из ответа
+    """
+    return user
