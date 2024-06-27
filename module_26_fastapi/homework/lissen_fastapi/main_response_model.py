@@ -83,9 +83,26 @@ async def create_user(user: UserIn) -> Any:
     """
     return user
 
+
 """
 В нашем примере модели входных данных и выходных данных различаются. И если мы укажем аннотацию типа выходного значения 
 функции как UserOut - проверка типов выдаст ошибку из-за того, что мы возвращаем некорректный тип. 
 Поскольку это 2 разных класса.
 Поэтому в нашем примере мы можем объявить тип ответа только в параметре response_model.
 """
+
+
+class BaseUser(BaseModel):
+    username: str
+    email: EmailStr
+    full_name: str | None = None
+
+
+class UserIn(BaseUser):
+    password: str
+
+
+@app.post("/user2/")
+async def create_user(user: UserIn) -> BaseUser:
+    """FastApi поймет что нужно вернуть BaseUser, хотя явно мы передаем UserIn. Тем самым мы не передалим пароль"""
+    return user
