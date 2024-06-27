@@ -1,7 +1,7 @@
 # Response Model - Return Type
 
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 from typing import Any
 
@@ -14,6 +14,17 @@ class Item(BaseModel):
     price: float
     tax: float | None = None
     tags: list[str] = []
+
+
+class UserIn(BaseModel):
+    """
+    Получить и вернуть один и тот же тип данных
+    Здесь мы объявили модель UserIn, которая хранит пользовательский пароль в открытом виде
+    """
+    username: str
+    password: str
+    email: EmailStr
+    full_name: str | None = None
 
 
 @app.post("/items/")
@@ -56,4 +67,3 @@ async def read_items() -> Any:
         {"name": "Portal Gun", "price": 42.0},
         {"name": "Plumbus", "price": 32.0},
     ]
-
