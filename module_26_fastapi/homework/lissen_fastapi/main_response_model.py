@@ -139,3 +139,36 @@ async def read_item(item_id: str):
     но вы, возможно, хотели бы исключить их из ответа,
     если данные поля не были заданы явно."""
     return items[item_id]
+
+
+class Item2(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float = 10.5
+
+
+items2 = {
+    "foo": {"name": "Foo", "price": 50.2},
+    "bar": {"name": "Bar", "description": "The Bar fighters", "price": 62, "tax": 20.2},
+    "baz": {
+        "name": "Baz",
+        "description": "There goes my baz",
+        "price": 50.2,
+        "tax": 10.5,
+    },
+}
+
+
+@app.get(
+    "/items/{item_id}/name",
+    response_model=Item2,
+    response_model_include={"name", "description"},
+)
+async def read_item_name(item_id: str):
+    return items2[item_id]
+
+
+@app.get("/items/{item_id}/public", response_model=Item2, response_model_exclude={"tax"})
+async def read_item_public_data(item_id: str):
+    return items2[item_id]
