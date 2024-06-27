@@ -20,3 +20,15 @@ async def read_items(ads_id: str | None = Cookie(default=None)):
     print(f'{ads_id=}')
     return {"ads_id": ads_id}
 
+
+@app.get("/header/")
+async def read_items(user_agent: Annotated[str | None, Header()] = None):
+    """
+    Чтобы объявить заголовки, важно использовать Header, иначе параметры интерпретируются как query-параметры.
+    По умолчанию Header преобразует символы имен параметров из символа подчеркивания (_) в дефис (-) для извлечения
+    и документирования заголовков.
+    """
+    print('user_agent', user_agent)
+    return {"User-Agent": user_agent}
+
+
