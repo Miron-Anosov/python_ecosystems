@@ -31,3 +31,14 @@ async def update_item(item_id: str, item: Item):
     print(update_item_encoded)
     items[item_id] = update_item_encoded
     return update_item_encoded
+
+"""
+Это означает, что если вы хотите обновить элемент bar, используя PUT с телом, содержащим:
+{
+    "name": "Barz",
+    "price": 3,
+    "description": None,
+}
+поскольку оно не включает уже сохраненный атрибут "tax": 20.2, входная модель примет значение по умолчанию "tax": 10.5.
+И данные будут сохранены с этим "новым" tax, равным 10,5.
+"""
