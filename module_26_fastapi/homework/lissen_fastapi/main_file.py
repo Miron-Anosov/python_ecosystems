@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
@@ -89,3 +90,39 @@ async def create_upload_file(
     print(type(file))  # <class 'starlette.datastructures.UploadFile'>
     return {"filename": file.filename}
 
+
+###########################################################################################
+
+"""
+Загрузка нескольких файлов
+Можно одновременно загружать несколько файлов.
+Они будут связаны с одним и тем же "полем формы", отправляемым с помощью данных формы.
+Для этого необходимо объявить список bytes или UploadFile
+"""
+
+
+@app.post("/files4/")
+async def create_files(files: Annotated[list[bytes], File()]):
+    return {"file_sizes": [len(file) for file in files]}
+
+
+@app.post("/uploadfiles4/")
+async def create_upload_files(files: list[UploadFile]):
+    return {"filenames": [file.filename for file in files]}
+
+
+@app.get("/")
+async def main():
+    content = """
+    <body>
+    <form action="/files/" enctype="multipart/form-data" method="post">
+    <input name="files" type="file" multiple>
+    <input type="submit">
+    </form>
+    <form action="/uploadfiles/" enctype="multipart/form-data" method="post">
+    <input name="files" type="file" multiple>
+    <input type="submit">
+    </form>
+    </body>
+        """
+    return HTMLResponse(content=content)
