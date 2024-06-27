@@ -104,5 +104,6 @@ class UserIn(BaseUser):
 
 @app.post("/user2/")
 async def create_user(user: UserIn) -> BaseUser:
-    """FastApi поймет что нужно вернуть BaseUser, хотя явно мы передаем UserIn. Тем самым мы не передалим пароль"""
+    """FastApi поймет что нужно вернуть BaseUser, хотя явно мы передаем UserIn. Тем самым мы не передадим пароль.
+    В случе, если пыпытаемся отдавать модель без наследования, будет нарушена типизация"""
     return user
