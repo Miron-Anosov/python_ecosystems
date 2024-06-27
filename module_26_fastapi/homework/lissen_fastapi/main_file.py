@@ -85,7 +85,7 @@ async def create_file(file: Annotated[bytes, File(description="A file read as by
 
 @app.post("/uploadfile3/")
 async def create_upload_file(
-    file: Annotated[UploadFile, File(description="A file read as UploadFile")],
+        file: Annotated[UploadFile, File(description="A file read as UploadFile")],
 ):
     print(type(file))  # <class 'starlette.datastructures.UploadFile'>
     return {"filename": file.filename}
@@ -126,3 +126,26 @@ async def main():
     </body>
         """
     return HTMLResponse(content=content)
+
+
+##############################################################################
+
+@app.post("/files5/")
+async def create_files(
+        files: Annotated[list[bytes], File(description="Multiple files as bytes")],
+):
+    return {"file_sizes": [len(file) for file in files]}
+
+
+@app.post("/uploadfiles6/")
+async def create_upload_files(
+        files: Annotated[
+            list[UploadFile], File(description="Multiple files as UploadFile")
+        ],
+):
+    return {"filenames": [file.filename for file in files]}
+
+"""
+Загрузка нескольких файлов с дополнительными метаданными
+Так же, как и раньше, вы можете использовать File() для задания дополнительных параметров, даже для UploadFile
+"""
