@@ -32,3 +32,18 @@ async def read_header(user_agent: Annotated[str | None, Header()] = None):
     return {"User-Agent": user_agent}
 
 
+@app.get("/header2/")
+async def read_list_headers(x_token: Annotated[list[str] | None, Header()] = None):
+    """
+    Вы получите все значения из повторяющегося заголовка в виде list Python.
+    Например, чтобы объявить заголовок X-Token, который может появляться более одного раза.
+    Returns:
+        {
+        "X-Token values": [
+            "bar",
+            "foo"
+        ]
+    }
+    """
+    return {"X-Token values": x_token}
+
