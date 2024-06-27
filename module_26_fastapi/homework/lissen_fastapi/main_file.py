@@ -67,3 +67,25 @@ async def create_upload_file(file: UploadFile | None = None):
         return {"filename": file.filename}
 
 
+####################################################################
+
+
+"""
+UploadFile с дополнительными метаданными
+
+Вы также можете использовать File() вместе с UploadFile, например, для установки дополнительных метаданных
+"""
+
+
+@app.post("/files3/")
+async def create_file(file: Annotated[bytes, File(description="A file read as bytes")]):
+    return {"file_size": len(file)}
+
+
+@app.post("/uploadfile3/")
+async def create_upload_file(
+    file: Annotated[UploadFile, File(description="A file read as UploadFile")],
+):
+    print(type(file))  # <class 'starlette.datastructures.UploadFile'>
+    return {"filename": file.filename}
+
