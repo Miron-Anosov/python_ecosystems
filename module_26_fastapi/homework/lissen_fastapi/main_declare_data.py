@@ -70,7 +70,7 @@ async def update_item2(item_id: int, item: ItemTwo):
 
 
 @app.put("/items3/{item_id}")
-async def update_item(
+async def update_item3(
         item_id: int,
         item: Annotated[
             Item,
@@ -92,7 +92,7 @@ async def update_item(
 
 
 @app.put("/items4/{item_id}")
-def update_item2(
+def update_item4(
         *,
         item_id: int,
         item:
