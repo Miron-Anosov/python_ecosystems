@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "testy food"
+version = "0.1.0"
+description = ""
+authors = ["Miron <mairon26rus@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.111.0"
+pytest = {extras = ["anyio"], version = "^8.2.2"}
+trio = "^0.25.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
