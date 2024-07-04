@@ -4,8 +4,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
 from pathlib import Path
 
-ENV_PATH = Path(__file__).parent.parent / '.env'
-ENV_PATH_TEST = Path(__file__).parent.parent / '.test.env'
+ENV_PATH = Path(__file__).parent.parent.parent / '.env'
+ENV_PATH_TEST = Path(__file__).parent.parent.parent / '.test.env'
 
 
 class Setting(BaseSettings):
@@ -44,4 +44,3 @@ class Configs:
 
 
 setting = Configs()
-
