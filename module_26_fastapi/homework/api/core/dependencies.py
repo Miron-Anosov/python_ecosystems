@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends
 from .orm_core import engine, crud
 from .validate_schemes.recipes_validate_model import ValidateRecipeInput, ValidateCollectionRecipesInput
 
@@ -14,7 +14,7 @@ async def get_recipe_by_id(recipe_id: int, session=Depends(get_session)):
     recipe = await crud.select_by_id(async_session=session, recipe_id=recipe_id)
     if recipe:
         await crud.update_chart(async_session=session, recipe_id=recipe_id)
-    return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Not found {recipe_id}')
+    return recipe
 
 
 async def get_all_recipes_from_db(session=Depends(get_session)):

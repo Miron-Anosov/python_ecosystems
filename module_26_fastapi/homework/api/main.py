@@ -3,7 +3,7 @@ from pathlib import Path
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from core import route as recipes, engine, BaseORM
+from core import router as recipes, engine, BaseORM
 
 SUMMARY = "Это API для управления рецептами. Оно позволяет получать, создавать и обновлять рецепты."
 DESCRIPTION = (Path(__file__).parent / 'static/description.md').read_text()
