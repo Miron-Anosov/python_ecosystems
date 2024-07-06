@@ -2,7 +2,7 @@ from typing import Iterable
 
 from sqlalchemy import text, Sequence
 from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
 from .models.recipes import RecipeORM, ChartRecipeORM
 from ..validate_schemes.recipes_validate_model import ValidateRecipeInput, ValidateCollectionRecipesInput
@@ -11,7 +11,7 @@ from ..validate_schemes.recipes_validate_model import ValidateRecipeInput, Valid
 class RecipeCRUD:
 
     @staticmethod
-    async def select_all_recipes_from_db(async_session: async_sessionmaker[AsyncSession]) -> Result:
+    async def select_all_recipes_from_db(async_session: AsyncSession) -> Result:
         """
         Возвращает все элементы из таблицы с рецептами:
            - название
@@ -29,12 +29,10 @@ class RecipeCRUD:
             ORDER BY view DESC, time ASC
             """
         )
-
-        async with async_session() as session:
-            return await session.execute(top_table)
+        return await async_session.execute(top_table)
 
     @staticmethod
-    async def select_by_id(async_session: async_sessionmaker[AsyncSession], recipe_id: int) -> RecipeORM | None:
+    async def select_by_id(async_session: AsyncSession, recipe_id: int) -> RecipeORM | None:
         """
         Возвращает рецепт из таблицы recipe по ID. Или None в случе отсутствия.
             - название
@@ -42,49 +40,47 @@ class RecipeCRUD:
             - список ингредиентов
             - текстовое описание
         """
-        async with async_session() as con:
-            return await con.get(RecipeORM, recipe_id)
+
+        return await async_session.get(RecipeORM, recipe_id)
 
     @staticmethod
-    async def insert_recipe(async_session: async_sessionmaker[AsyncSession], recipe: ValidateRecipeInput) -> RecipeORM:
+    async def insert_recipe(async_session: AsyncSession, recipe: ValidateRecipeInput) -> RecipeORM:
         """
         Добавляем новый рецепт в таблицу recipe.
         """
-        async with async_session() as session:
-            recipe_orm = RecipeORM(**recipe.model_dump())
-            session.add(recipe_orm)
-            await session.commit()
-            return recipe_orm
+        recipe_orm = RecipeORM(**recipe.model_dump())
+        async_session.add(recipe_orm)
+        await async_session.commit()
+        return recipe_orm
 
     @staticmethod
-    async def update_chart(async_session: async_sessionmaker[AsyncSession], recipe_id: int) -> None:
+    async def update_chart(async_session: AsyncSession, recipe_id: int) -> None:
         """Обновляем статистику просмотров рецепта view += 1 в top_chart"""
-        async with async_session() as session:
-            async with session.begin():
-                chart = await session.get(ChartRecipeORM, recipe_id)
-                chart.view += 1
-                session.add(chart)
+
+        async with async_session.begin():
+            chart = await async_session.get(ChartRecipeORM, recipe_id)
+            chart.view += 1
+            async_session.add(chart)
 
     @staticmethod
-    async def insert_chart(async_session: async_sessionmaker[AsyncSession],
+    async def insert_chart(async_session: AsyncSession,
                            recipes: list[RecipeORM] | RecipeORM) -> None:
         """
         Добавляем рецепты в таблицу top_chart для отслеживания статистики просмотров.
         """
 
-        async with async_session() as session:
-            if isinstance(recipes, Iterable):
-                for recipe in recipes:
-                    new_chart = ChartRecipeORM(recipe_id=recipe.recipe_id)
-                    session.add(new_chart)
-            else:
-                new_chart = ChartRecipeORM(recipe_id=recipes.recipe_id)
-                session.add(new_chart)
-            await session.commit()
+        if isinstance(recipes, Iterable):
+            for recipe in recipes:
+                new_chart = ChartRecipeORM(recipe_id=recipe.recipe_id)
+                async_session.add(new_chart)
+        else:
+            new_chart = ChartRecipeORM(recipe_id=recipes.recipe_id)
+            async_session.add(new_chart)
+        await async_session.commit()
 
     @staticmethod
     async def inset_many_recipes(
-            async_session: async_sessionmaker[AsyncSession],
+            async_session: AsyncSession,
             recipes: ValidateCollectionRecipesInput
     ) -> Sequence[RecipeORM]:
 
@@ -93,11 +89,10 @@ class RecipeCRUD:
         """
 
         new_recipes: list = recipes.model_dump().get('recipes')
-        async with async_session() as session:
-            stmt = insert(RecipeORM).values(new_recipes).returning(RecipeORM)
-            result: Result[tuple[RecipeORM]] = await session.execute(stmt)
-            await session.commit()
-            return result.scalars().all()
+        stmt = insert(RecipeORM).values(new_recipes).returning(RecipeORM)
+        result: Result[tuple[RecipeORM]] = await async_session.execute(stmt)
+        await async_session.commit()
+        return result.scalars().all()
 
 
 crud = RecipeCRUD()

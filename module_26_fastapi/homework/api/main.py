@@ -11,7 +11,7 @@ DESCRIPTION = (Path(__file__).parent / 'static/description.md').read_text()
 tags_metadata = [
     {
         "name": "Recipes",
-        "description": "Operations with recipes here .",
+        "description": "Попробуй это.",
     },
 ]
 
@@ -23,7 +23,7 @@ CONTACT = {
 
 SERVERS = [
     {
-        "url": "http://localhost:8000/v1"
+        "url": "http://127.0.0.1:8000"
     }
 ]
 

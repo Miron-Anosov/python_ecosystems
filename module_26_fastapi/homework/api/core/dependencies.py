@@ -3,9 +3,10 @@ from .orm_core import engine, crud
 from .validate_schemes.recipes_validate_model import ValidateRecipeInput, ValidateCollectionRecipesInput
 
 
-def get_session():
+async def get_session():
     """Как лучше обращаться к сессии?"""
-    return engine.create_async_session_maker
+    async with engine.create_async_session_maker() as session:
+        yield session
 
 
 async def get_recipe_by_id(recipe_id: int, session=Depends(get_session)):
