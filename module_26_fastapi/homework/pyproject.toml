@@ -8,13 +8,15 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 fastapi = "^0.111.0"
-pytest = {extras = ["anyio"], version = "^8.2.2"}
-trio = "^0.25.1"
 sqlalchemy = {extras = ["asyncio"], version = "^2.0.31"}
 pytest-dotenv = "^0.5.2"
 pydantic-settings = "^2.3.4"
 asyncpg = "^0.29.0"
 
+[tool.poetry.group.dev.dependencies]
+pytest = {extras = ["anyio"], version = "^8.2.2"}
+trio = "^0.25.1"
+asgi-lifespan = "==2.*"
 
 [build-system]
 requires = ["poetry-core"]
