@@ -17,6 +17,7 @@ asyncpg = "^0.29.0"
 pytest = {extras = ["anyio"], version = "^8.2.2"}
 trio = "^0.25.1"
 asgi-lifespan = "==2.*"
+pytest-asyncio = "^0.23.7"
 
 [build-system]
 requires = ["poetry-core"]
