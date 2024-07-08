@@ -3,7 +3,13 @@ from pathlib import Path
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from core import router as recipes, engine, BaseORM
+
+try:
+    # TODO для выполнения тестов не получалось организовать импорт так что бы не возникала ошибка.
+    from .core import router as recipes, engine, BaseORM
+except ImportError:
+    from core import router as recipes, engine, BaseORM
+
 
 SUMMARY = "Это API для управления рецептами. Оно позволяет получать, создавать и обновлять рецепты."
 DESCRIPTION = (Path(__file__).parent / 'static/description.md').read_text()
@@ -35,6 +41,7 @@ async def lifespan(_: FastAPI):
     yield
     async with engine.async_engine.begin() as conn:
         await conn.run_sync(BaseORM.metadata.drop_all)
+        await engine.async_engine.dispose()
 
 
 app = FastAPI(lifespan=lifespan, title="Menu", version="0.0.1.alfa",
