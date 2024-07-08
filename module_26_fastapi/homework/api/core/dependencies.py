@@ -5,15 +5,16 @@ from .validate_schemes.recipes_validate_model import ValidateRecipeInput, Valida
 
 async def get_session():
     """Как лучше обращаться к сессии?"""
-    async with engine.create_async_session_maker() as session:
+    async with engine.get_async_scoped_session() as session:
         yield session
+        await session.close()
 
 
 async def get_recipe_by_id(recipe_id: int, session=Depends(get_session)):
     """Возвращает рецепт по ID"""
     recipe = await crud.select_by_id(async_session=session, recipe_id=recipe_id)
     if recipe:
-        await crud.update_chart(async_session=session, recipe_id=recipe_id)
+        await crud.update_chart(async_session=session, recipe_id=recipe.recipe_id)
     return recipe
 
 
