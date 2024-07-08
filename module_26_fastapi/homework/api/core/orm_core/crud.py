@@ -40,8 +40,9 @@ class RecipeCRUD:
             - список ингредиентов
             - текстовое описание
         """
-
-        return await async_session.get(RecipeORM, recipe_id)
+        recipe = await async_session.get(RecipeORM, recipe_id)
+        await async_session.close()
+        return recipe
 
     @staticmethod
     async def insert_recipe(async_session: AsyncSession, recipe: ValidateRecipeInput) -> RecipeORM:
