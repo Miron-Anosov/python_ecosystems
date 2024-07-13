@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "fast-api-with-postgres"
+version = "0.1.0"
+description = "docker images"
+authors = ["Miron <mairon26rus@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+Flask = "^3.0.3"
+asyncpg = "^0.29.0"
+python-dotenv = "^1.0.1"
+gunicorn = "^22.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
