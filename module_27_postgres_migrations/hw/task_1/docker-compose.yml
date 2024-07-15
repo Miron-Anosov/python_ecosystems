@@ -13,7 +13,7 @@ services:
     ports:
       - '5544:5432'
     volumes:
-      - 'postgres_storage:/var/lib/postgresql/data'
+      - './postgres_storage:/var/lib/postgresql/data'
     shm_size: 256mb
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
