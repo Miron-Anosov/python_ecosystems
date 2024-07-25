@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "sync postgres"
 version = "0.1.0"
-description = ""
+description = "lear postgres"
 authors = ["Miron <mairon26rus@gmail.com>"]
 readme = "README.md"
 package-mode = false
@@ -9,8 +9,12 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "^3.12"
 sqlalchemy = "^2.0.31"
-flask = "2.0"
 werkzeug = "2.3.8"
+aiohttp = "^3.9.5"
+psycopg2-binary = "^2.9.9"
+pydantic-settings = "^2.3.4"
+flask = "2.0"
+gunicorn = "^22.0.0"
 
 
 [build-system]
