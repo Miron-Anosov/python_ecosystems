@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "sync postgres"
 version = "0.1.0"
-description = "lear postgres"
+description = "learn postgres"
 authors = ["Miron <mairon26rus@gmail.com>"]
 readme = "README.md"
 package-mode = false
