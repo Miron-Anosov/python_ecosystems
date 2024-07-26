@@ -25,7 +25,7 @@ class UserORM(BaseModel):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(length=50), nullable=False)
-    has_sale: Mapped[bool] = mapped_column(BOOLEAN, nullable=True)
+    #has_sale: Mapped[bool] = mapped_column(BOOLEAN, nullable=True)
     address: Mapped[dict] = mapped_column(JSON, nullable=True)
     coffee_id: Mapped[int] = mapped_column(ForeignKey('coffee.id'))
     prefer_kind_of_coffee: Mapped["CoffeeORM"] = relationship(back_populates="type_coffee")
