@@ -1,16 +1,22 @@
 [tool.poetry]
-name = "fast-api-with-postgres"
+name = "sync postgres"
 version = "0.1.0"
-description = "docker images"
+description = "learn postgres"
 authors = ["Miron <mairon26rus@gmail.com>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
-python-dotenv = "^1.0.1"
-gunicorn = "^22.0.0"
-flask = "^3.0.3"
+sqlalchemy = "^2.0.31"
+werkzeug = "2.3.8"
+aiohttp = "^3.9.5"
 psycopg2-binary = "^2.9.9"
+pydantic-settings = "^2.3.4"
+flask = "2.0"
+gunicorn = "^22.0.0"
+alembic = "^1.13.2"
+black = "^24.4.2"
 
 
 [build-system]

@@ -10,17 +10,18 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 ENV POETRY_HOME=/opt/poetry
+
 ENV PATH="$POETRY_HOME/bin:$PATH"
 RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.3
+
 RUN poetry config virtualenvs.create false --local
 COPY pyproject.toml poetry.lock* /app/
 RUN poetry install --no-dev
-
 COPY ./app /app/app
 
 FROM python:3.12-slim-bullseye
-WORKDIR /app
+WORKDIR /app/app/
 COPY --from=builder /app /app
-COPY --from=builder /usr/local /usr/local
+COPY --from=builder /usr/local/ /usr/local/
 
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "app.main:app", "--access-logfile=-"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "app:app", "--access-logfile=-"]
