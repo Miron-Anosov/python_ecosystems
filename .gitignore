@@ -139,3 +139,4 @@ dmypy.json
 .swp
 
 *.txt
+.vscode/
