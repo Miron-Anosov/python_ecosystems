@@ -2,11 +2,14 @@
 name = "testing_app"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Miron miron.nicolaevich@gmail.com"]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"
 Flask = "^3.0.3"
+pydantic = "^2.8.2"
+Flask-SQLAlchemy = "^3.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
