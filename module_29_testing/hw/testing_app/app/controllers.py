@@ -11,8 +11,25 @@ def return_clients_from_db() -> json:
     GET /clients — список всех клиентов.
     """
     list_clients = db.session.execute(select(Client)).scalars().all()
-    print(list_clients)
-    return list_clients
+
+    list_dict_clients = []
+
+    try:
+
+        for client_from_db in list_clients:
+            dict_client = {
+                "name": client_from_db.name,
+                "surname": client_from_db.surname,
+                "credit card": f"*****{client_from_db.credit_card[-4:]}",  # very hard secret
+                "car's number": client_from_db.car_number,
+                "id": client_from_db.id
+            }
+            list_dict_clients.append(dict_client)
+
+        return jsonify([{"clients": list_dict_clients}])
+
+    except Exception:
+        return jsonify({"Error": "Internal Server Error:"}), 500
 
 
 @parking.route("/clients/<int:client_id>", methods=["GET"])
@@ -23,7 +40,23 @@ def return_client_by_id(client_id: int):
     Args:
         client_id (int): уникальное ID клиента.
     """
-    return jsonify({"client_id": client_id})
+    try:
+        assert isinstance(client_id, int), "miss client's id"
+        client_from_db = db.get_or_404(Client, client_id)
+
+        return jsonify([{'client': {
+            "name": client_from_db.name,
+            "surname": client_from_db.surname,
+            "credit card": f"*****{client_from_db.credit_card[-4:]}",  # very hard secret
+            "car's number": client_from_db.car_number,
+            "id": client_from_db.id
+        }}]), 200
+
+    except AssertionError:
+        return jsonify({"Error", "Bad Request"}), 400
+
+    except Exception:
+        return jsonify({"Error": "Internal Server Error:"}), 500
 
 
 @parking.route("/clients", methods=["POST"])
