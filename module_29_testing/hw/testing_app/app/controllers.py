@@ -1,5 +1,6 @@
 from flask import Blueprint, json, jsonify, request
-from orm_models import db, Client
+from sqlalchemy import insert, select
+from orm_models import db, Client, Parking, ClientParking
 
 parking = Blueprint("parking", __name__)
 
@@ -9,7 +10,9 @@ def return_clients_from_db() -> json:
     """
     GET /clients — список всех клиентов.
     """
-    return jsonify({"test": "OK"})
+    list_clients = db.session.execute(select(Client)).scalars().all()
+    print(list_clients)
+    return list_clients
 
 
 @parking.route("/clients/<int:client_id>", methods=["GET"])
@@ -28,12 +31,25 @@ def make_client():
     """
     POST /clients — создать нового клиента.
     """
-    if data := request.get_json():
-        client = Client(**data)
-        print(client)
-        client_db = db.session.add(client)
+    try:
+        if data := request.get_json():
+            client = Client(**data)
+            db.session.add(client)
+            db.session.flush()
+            db.session.commit()
 
-        print(client_db)
+            return jsonify([{'client': {
+                "name": client.name,
+                "surname": client.surname,
+                "credit card": f"*****{client.credit_card[-4:]}",  # very hard secret
+                "car's number": client.car_number,
+                "id": client.id
+            }}]), 201
+
+        return {"Error": "Bad request"}, 400
+
+    except AttributeError:
+        return jsonify({"Error": "Internal Server Error:"}), 500
 
 
 @parking.route("/parkings", methods=["POST"])
