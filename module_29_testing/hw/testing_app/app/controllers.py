@@ -1,5 +1,9 @@
+import datetime
+
 from flask import Blueprint, json, jsonify, request
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
+
 from orm_models import db, Client, Parking, ClientParking
 
 parking = Blueprint("parking", __name__)
@@ -63,6 +67,16 @@ def return_client_by_id(client_id: int):
 def make_client():
     """
     POST /clients — создать нового клиента.
+
+    Notes
+         curl -X POST http://localhost:8080/clients \
+             -H "Content-Type: application/json" \
+             -d '{
+                       "name": "John",
+                       "surname": "Doe",
+                       "credit_card": "1234567812345678",
+                       "car_number": "XYZ1234"
+                     }'
     """
     try:
         if data := request.get_json():
@@ -79,6 +93,9 @@ def make_client():
                 "id": client.id
             }}]), 201
 
+        raise KeyError(data)
+
+    except KeyError:
         return {"Error": "Bad request"}, 400
 
     except AttributeError:
@@ -89,6 +106,16 @@ def make_client():
 def make_parking():
     """
     POST /parkings — создать новую парковочную зону.
+
+    Notes:
+        curl -X POST http://localhost:8080/parkings \
+             -H "Content-Type: application/json" \
+             -d '{
+                   "address": "123 Main St",
+                   "opened": false,
+                   "count_places": 100,
+                   "count_available_places": 80
+                 }'
     """
     try:
         if data := request.get_json():
@@ -105,6 +132,9 @@ def make_parking():
                 "id": new_parking.id
             }}]), 201
 
+        raise KeyError(data)
+
+    except KeyError:
         return {"Error": "Bad request"}, 400
 
     except AttributeError:
@@ -117,8 +147,50 @@ def go_to_parking_place() -> json:
     POST client_parkings — заезд на парковку (проверить, открыта ли парковка,
     количество свободных мест на парковке уменьшается, фиксируется дата заезда)
     В теле запроса передать client_id, parking_id.
+
+    Notes:
+        curl -X POST http://localhost:8080/client_parkings \
+             -H "Content-Type: application/json" \
+             -d '{
+                   "client_id": 1,
+                   "parking_id": 1
+                 }'
     """
-    ...
+    try:
+        if data := request.get_json():
+
+            parking_try = ClientParking(**data)
+            parking_from_db = db.session.get(Parking, parking_try.parking_id)
+
+            assert parking_from_db.opened is True, 'Parking close'
+            assert parking_from_db.count_available_places > 0
+
+            parking_from_db.count_available_places -= 1
+            parking_try.time_in = datetime.datetime.now(datetime.timezone.utc)
+
+            db.session.add(parking_try)
+            db.session.flush()
+            db.session.commit()
+
+            return jsonify([{"book parking place": {
+                "client id": parking_try.client_id,
+                "parking id": parking_try.parking_id,
+                "time in": parking_try.time_in,
+                "time out": parking_try.time_out,
+                "id": parking_try.id
+            }}])
+
+        raise AssertionError
+
+    except AssertionError as e:
+        return jsonify({'Error': e.args}), 422
+
+    except IntegrityError as e:
+        if "(sqlite3.IntegrityError) " in e.args[0]:
+            return jsonify({'Error': "UNIQUE constraint failed: client_parking.parking_id"}), 422
+
+    except AttributeError:
+        return jsonify({"Error": "Internal Server Error:"}), 500
 
 
 @parking.route("/client_parkings")
