@@ -158,7 +158,6 @@ def go_to_parking_place() -> json:
     """
     try:
         if data := request.get_json():
-
             parking_try = ClientParking(**data)
             parking_from_db = db.session.get(Parking, parking_try.parking_id)
 
@@ -193,11 +192,56 @@ def go_to_parking_place() -> json:
         return jsonify({"Error": "Internal Server Error:"}), 500
 
 
-@parking.route("/client_parkings")
-def go_out_from_parkin_place() -> json:
+@parking.route("/client_parkings", methods=["DELETE"])
+def go_out_from_parking_place() -> json:
     """
     DELETE client_parkings — выезд с парковки (количество свободных мест
     увеличивается проставляем время выезда).
     В теле запроса передать client_id, parking_id.
+
+    Notes:
+        curl -X DELETE http://localhost:8080/client_parkings \
+     -H "Content-Type: application/json" \
+     -d '{
+           "client_id": 1,
+           "parking_id": 1
+         }'
+
     """
-    ...
+    try:
+        if data := request.get_json():
+            client_parking = ClientParking(**data)
+
+            try_go_out_from_parking = db.session.execute(select(ClientParking).where(
+                ClientParking.parking_id == client_parking.parking_id
+            ).where(ClientParking.client_id ==
+                    client_parking.client_id)).scalar_one()
+
+            parking_place = db.session.get(Parking, client_parking.parking_id)
+            parking_place.count_available_places += 1
+
+            client = db.session.get(Client, client_parking.client_id)
+
+            assert client.credit_card is not None, "The client does not have a credit card."
+            assert parking_place.count_places >= parking_place.count_available_places, 'No way!'
+
+            try_go_out_from_parking.time_out = datetime.datetime.now(datetime.timezone.utc)
+
+            db.session.flush()
+            db.session.commit()
+
+            return jsonify([{"leave parking place": {
+                "client id": try_go_out_from_parking.client_id,
+                "parking id": try_go_out_from_parking.parking_id,
+                "time in": try_go_out_from_parking.time_in,
+                "time out": try_go_out_from_parking.time_out,
+                "id": try_go_out_from_parking.id
+            }}]), 202
+
+        raise AssertionError
+
+    except AssertionError as e:
+        return jsonify({'Error': e.args}), 422
+
+    except Exception as e:
+        return jsonify({"Error": "Internal Server Error:"}), 500
