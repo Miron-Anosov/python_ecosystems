@@ -1,5 +1,5 @@
 from flask import Blueprint, json, jsonify, request
-from sqlalchemy import insert, select
+from sqlalchemy import select
 from orm_models import db, Client, Parking, ClientParking
 
 parking = Blueprint("parking", __name__)
@@ -90,7 +90,25 @@ def make_parking():
     """
     POST /parkings — создать новую парковочную зону.
     """
-    ...
+    try:
+        if data := request.get_json():
+            new_parking = Parking(**data)
+            db.session.add(new_parking)
+            db.session.flush()
+            db.session.commit()
+
+            return jsonify([{'parking': {
+                "address": new_parking.address,
+                "opened": new_parking.opened,
+                "count places": new_parking.count_places,
+                "count available places": new_parking.count_available_places,
+                "id": new_parking.id
+            }}]), 201
+
+        return {"Error": "Bad request"}, 400
+
+    except AttributeError:
+        return jsonify({"Error": "Internal Server Error:"}), 500
 
 
 @parking.route("/client_parkings", methods=["POST"])
