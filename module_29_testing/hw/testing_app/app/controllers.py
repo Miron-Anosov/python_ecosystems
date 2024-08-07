@@ -32,7 +32,7 @@ def return_clients_from_db() -> json:
 
         return jsonify([{"clients": list_dict_clients}])
 
-    except Exception:
+    except (Exception, KeyError, ValueError, TimeoutError, OSError, AttributeError):
         return jsonify({"Error": "Internal Server Error:"}), 500
 
 
@@ -59,7 +59,7 @@ def return_client_by_id(client_id: int):
     except AssertionError:
         return jsonify({"Error", "Bad Request"}), 400
 
-    except Exception:
+    except (Exception, KeyError, ValueError, TimeoutError, OSError, AttributeError):
         return jsonify({"Error": "Internal Server Error:"}), 500
 
 
@@ -98,7 +98,7 @@ def make_client():
     except KeyError:
         return {"Error": "Bad request"}, 400
 
-    except AttributeError:
+    except (Exception, KeyError, ValueError, TimeoutError, OSError, AttributeError):
         return jsonify({"Error": "Internal Server Error:"}), 500
 
 
@@ -137,7 +137,7 @@ def make_parking():
     except KeyError:
         return {"Error": "Bad request"}, 400
 
-    except AttributeError:
+    except (Exception, KeyError, ValueError, TimeoutError, OSError, AttributeError):
         return jsonify({"Error": "Internal Server Error:"}), 500
 
 
@@ -188,7 +188,7 @@ def go_to_parking_place() -> json:
         if "(sqlite3.IntegrityError) " in e.args[0]:
             return jsonify({'Error': "UNIQUE constraint failed: client_parking.parking_id"}), 422
 
-    except AttributeError:
+    except (Exception, KeyError, ValueError, TimeoutError, OSError, AttributeError):
         return jsonify({"Error": "Internal Server Error:"}), 500
 
 
@@ -243,5 +243,5 @@ def go_out_from_parking_place() -> json:
     except AssertionError as e:
         return jsonify({'Error': e.args}), 422
 
-    except Exception as e:
+    except (Exception, KeyError, ValueError, TimeoutError, OSError, AttributeError):
         return jsonify({"Error": "Internal Server Error:"}), 500
