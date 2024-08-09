@@ -8,11 +8,24 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "^3.10"
 Flask = "^3.0.3"
-pydantic = "^2.8.2"
 Flask-SQLAlchemy = "^3.1.1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2"
+pytest = "^8.3"
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.6.1"
+pytest-cov = "^5.0.0"
+faker = "^26.2.0"
+factory-boy = "=3.0.1"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["app"]
+
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
