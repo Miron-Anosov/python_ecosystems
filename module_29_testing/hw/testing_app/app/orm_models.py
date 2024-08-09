@@ -12,8 +12,7 @@ class Base(DeclarativeBase):
 
     def __repr__(self) -> str:
         columns = [
-            f"{row}={getattr(self, row)}"
-            for row in self.__table__.columns.keys()
+            f"{row}={getattr(self, row)}" for row in self.__table__.columns.keys()
         ]
 
         return f"<{self.__class__.__tablename__}> {','.join(columns)}"
@@ -34,7 +33,7 @@ class Parking(Base):
     __tablename__ = "parking"
 
     address: Mapped[str] = mapped_column(String(length=100))
-    opened: Mapped[bool]
+    opened: Mapped[bool | None]
     count_places: Mapped[int]
     count_available_places: Mapped[int]
 
@@ -43,11 +42,9 @@ class ClientParking(Base):
 
     __tablename__ = "client_parking"
 
-    client_id: Mapped[int] = mapped_column(
-        ForeignKey("client.id"), unique=True)
+    client_id: Mapped[int] = mapped_column(ForeignKey("client.id"), unique=True)
 
-    parking_id: Mapped[int] = mapped_column(
-        ForeignKey("parking.id"), unique=True)
+    parking_id: Mapped[int] = mapped_column(ForeignKey("parking.id"), unique=True)
 
     time_in: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     time_out: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
