@@ -268,9 +268,5 @@ def go_out_from_parking_place() -> json:
             202,
         )
 
-    except (
-        NoResultFound,
-        TypeError,
-        AssertionError
-    ):
+    except (NoResultFound, TypeError, AssertionError):
         return jsonify({"Error": f"Bad request"}), 400
