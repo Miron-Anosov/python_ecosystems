@@ -84,12 +84,14 @@ class TestGetAllClients:
         response = client.post("/parkings", headers=headers, json=params)
         assert response.status_code == 400
 
+    @pytest.mark.parking
     def test_post_client_parking_response_error_400(self, client: FlaskClient) -> None:
 
         headers = {"Content-Type": "application/json"}
         response = client.post("/client_parkings", headers=headers)
         assert response.status_code == 400
 
+    @pytest.mark.parking
     def test_post_client_parking_response_error_400_again(
         self, client: FlaskClient
     ) -> None:
@@ -99,6 +101,7 @@ class TestGetAllClients:
         response = client.post("/client_parkings", headers=headers, json=params)
         assert response.status_code == 400
 
+    @pytest.mark.parking
     def test_post_client_parking_response_error_content_type(
         self, client: FlaskClient
     ) -> None:
@@ -106,11 +109,13 @@ class TestGetAllClients:
         response = client.post("/client_parkings")
         assert response.status_code == 415
 
+    @pytest.mark.parking
     def test_delete_client_parking_no_content_type(self, client: FlaskClient) -> None:
 
         response = client.delete("/client_parkings")
         assert response.status_code == 415
 
+    @pytest.mark.parking
     def test_delete_client_parking_invalid_json_error_400(
         self, client: FlaskClient
     ) -> None:
@@ -120,6 +125,7 @@ class TestGetAllClients:
         response = client.delete("/client_parkings", headers=headers, json=params)
         assert response.status_code == 400
 
+    @pytest.mark.parking
     def test_delete_client_parking_error_400(self, client: FlaskClient) -> None:
 
         headers = {"Content-Type": "application/json"}

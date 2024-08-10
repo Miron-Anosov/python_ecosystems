@@ -93,6 +93,7 @@ class TestAPIandDB:
         assert response.status_code == 201
         yield params
 
+    @pytest.mark.parking
     def test_post_client_parking_book_fail_available_places_400(
         self, client: FlaskClient, flask_app: Flask
     ) -> None:
@@ -111,6 +112,7 @@ class TestAPIandDB:
 
         assert response.status_code == 400
 
+    @pytest.mark.parking
     def test_post_client_parking_book_fail_opened_400(
         self, client: FlaskClient, flask_app: Flask
     ) -> None:
@@ -129,6 +131,7 @@ class TestAPIandDB:
 
         assert response.status_code == 400
 
+    @pytest.mark.parking
     def test_delete_client_parking_access(
         self,
         client: FlaskClient,
