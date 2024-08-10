@@ -64,14 +64,6 @@ class ParkingFakeFactory(factory.alchemy.SQLAlchemyModelFactory):
     count_available_places = factory.Faker("random_digit")
 
 
-class ParkingFakeFactoryAlwaysOpened(ParkingFakeFactory):
-    opened = factory.Faker("boolean", chance_of_getting_true=100)
-
-
-class ParkingFakeFactoryAlwaysClosed(ParkingFakeFactory):
-    opened = factory.Faker("boolean", chance_of_getting_true=0)
-
-
 class ParkingInvalidFakeFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = Parking
