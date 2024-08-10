@@ -8,7 +8,6 @@ from .factories import (
     ClientInvalidFakeFactory,
     ParkingInvalidFakeFactory,
     ClientParkingFakeFactory,
-    ParkingFakeFactoryAlwaysOpened,
 )
 from app.orm_models import Client, Parking, ClientParking  # noqa
 
@@ -70,7 +69,7 @@ class TestCreateFakeDataToDB:
     def test_create_client_parking(self, flask_app):
         with flask_app.app_context():
             new_client = ClientFakeFactory()
-            new_parking = ParkingFakeFactoryAlwaysOpened()
+            new_parking = ParkingFakeFactory(opened=True)
 
             flask_app.config["db"].session.flush()
 
