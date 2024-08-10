@@ -126,3 +126,47 @@ class TestGetAllClients:
         params = {"client_id": None, "parking_id": 1}
         response = client.delete("/client_parkings", headers=headers, json=params)
         assert response.status_code == 400
+
+
+"############################# WITH MARK ###############################################"
+
+
+class TestAllEndpoints:
+
+    @pytest.mark.parametrize(
+        "method, url, expected_status_code, headers",
+        [
+            ("GET", "/clients", 200, None),
+            ("GET", "/clients/1", 404, None),
+            ("POST", "/client_parkings", 415, None),
+            ("POST", "/client_parkings", 400, {"Content-Type": "application/json"}),
+            ("POST", "/client_parkings", 415, None),
+            ("DELETE", "/client_parkings", 400, {"Content-Type": "application/json"}),
+        ],
+    )
+    def test_all_routes(
+        self,
+        client_scope_only_func: FlaskClient,
+        method: str,
+        url: str,
+        expected_status_code,
+        headers,
+    ):
+
+        match (method, headers):
+            case ("GET", _):
+                response = client_scope_only_func.get(url)
+            case ("POST", None):
+                response = client_scope_only_func.post(url)
+            case ("POST", headers):
+                response = client_scope_only_func.post(url, headers=headers)
+            case ("DELETE", None):
+                response = client_scope_only_func.delete(url)
+            case ("DELETE", headers):
+                response = client_scope_only_func.delete(url, headers=headers)
+            case _:
+                pytest.fail(f"Unsupported combination: {method=}, {headers=}")
+
+        assert (
+            response.status_code == expected_status_code
+        ), f"{method=}, {url=}, {expected_status_code=}"
