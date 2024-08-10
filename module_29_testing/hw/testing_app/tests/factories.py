@@ -1,3 +1,5 @@
+import random
+
 import factory
 from app.orm_models import Client, Parking, ClientParking  # noqa
 from app.main import db  # noqa
@@ -43,7 +45,7 @@ class ClientInvalidFakeFactory(factory.alchemy.SQLAlchemyModelFactory):
         no_declaration=None,
     )
     car_number = factory.Maybe(
-        factory.Faker("boolean", chance_of_getting_true=255),
+        factory.Faker("boolean", chance_of_getting_true=55),
         yes_declaration=factory.Faker("license_plate", locale="en_US"),
         no_declaration=None,
     )
@@ -61,7 +63,9 @@ class ParkingFakeFactory(factory.alchemy.SQLAlchemyModelFactory):
         no_declaration=None,
     )
     count_places = factory.Faker("random_number", digits=2)
-    count_available_places = factory.Faker("random_digit")
+    count_available_places = factory.LazyAttribute(
+        lambda c: random.randrange(c.count_places)
+    )
 
 
 class ParkingInvalidFakeFactory(factory.alchemy.SQLAlchemyModelFactory):
@@ -80,11 +84,13 @@ class ParkingInvalidFakeFactory(factory.alchemy.SQLAlchemyModelFactory):
         no_declaration=None,
     )
     count_places = factory.Maybe(
-        factory.Faker("boolean", chance_of_getting_true=0),
+        factory.Faker("boolean", chance_of_getting_true=100),
         yes_declaration=factory.Faker("random_number", digits=2),
         no_declaration=None,
     )
-    count_available_places = factory.Faker("random_digit")
+    count_available_places = factory.LazyAttribute(
+        lambda c: random.randrange(c.count_places)
+    )
 
 
 class ClientParkingFakeFactory(factory.alchemy.SQLAlchemyModelFactory):
