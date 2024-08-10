@@ -49,21 +49,80 @@ class TestGetAllClients:
 
     def test_post_client_response_error(self, client: FlaskClient) -> None:
         response = client.post("/clients")
-        assert response.status_code == 500
-
-    def test_post_client_parking_response_error_content_type(
-        self, client: FlaskClient
-    ) -> None:
-        response = client.post("/client_parkings")
         assert response.status_code == 415
 
+    def test_post_client_response_invalid_json_400(self, client: FlaskClient) -> None:
+
+        headers = {"Content-Type": "application/json"}
+        params = {
+            "name": "John",
+            # "surname": "Doe",
+            "credit_card": "1234567812345678",
+            "car_number": "XYZ1234",
+        }
+        response = client.post("/clients", headers=headers, json=params)
+        assert response.status_code == 400
+
+    def test_post_client_parking_response_no_content_type_415(
+        self, client: FlaskClient
+    ) -> None:
+
+        response = client.post("/parkings")
+        assert response.status_code == 415
+
+    def test_post_client_parking_response_invalid_json_error_400(
+        self, client: FlaskClient
+    ) -> None:
+
+        headers = {"Content-Type": "application/json"}
+        params = {
+            # "address": "123 Main St",
+            "opened": False,
+            "count_places": 100,
+            "count_available_places": 80,
+        }
+        response = client.post("/parkings", headers=headers, json=params)
+        assert response.status_code == 400
+
     def test_post_client_parking_response_error_400(self, client: FlaskClient) -> None:
+
         headers = {"Content-Type": "application/json"}
         response = client.post("/client_parkings", headers=headers)
         assert response.status_code == 400
 
-    def test_post_client_parking_response_error_500(self, client: FlaskClient) -> None:
+    def test_post_client_parking_response_error_400_again(
+        self, client: FlaskClient
+    ) -> None:
+
         headers = {"Content-Type": "application/json"}
         params = {"invalid params": None}
         response = client.post("/client_parkings", headers=headers, json=params)
-        assert response.status_code == 422
+        assert response.status_code == 400
+
+    def test_post_client_parking_response_error_content_type(
+        self, client: FlaskClient
+    ) -> None:
+
+        response = client.post("/client_parkings")
+        assert response.status_code == 415
+
+    def test_delete_client_parking_no_content_type(self, client: FlaskClient) -> None:
+
+        response = client.delete("/client_parkings")
+        assert response.status_code == 415
+
+    def test_delete_client_parking_invalid_json_error_400(
+        self, client: FlaskClient
+    ) -> None:
+
+        headers = {"Content-Type": "application/json"}
+        params = {"invalid params": None}
+        response = client.delete("/client_parkings", headers=headers, json=params)
+        assert response.status_code == 400
+
+    def test_delete_client_parking_error_400(self, client: FlaskClient) -> None:
+
+        headers = {"Content-Type": "application/json"}
+        params = {"client_id": None, "parking_id": 1}
+        response = client.delete("/client_parkings", headers=headers, json=params)
+        assert response.status_code == 400
